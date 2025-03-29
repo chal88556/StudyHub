@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyHub Chat</title>
+  <!-- Add favicon -->
+  <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+  
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* General Body Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f8f9fa;
+  color: #343a40;
+  overflow: hidden;
+}
+
+/* Main Container */
+.chat-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(145deg, #4a148c, #8e24aa);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  border-radius: 10px 0 0 10px;
+  overflow: hidden;
+}
+
+.sidebar:hover {
+  width: 300px;
+}
+
+.profile-section {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-section:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid #fff;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img:hover {
+  transform: scale(1.05);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info .name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.profile-info .email {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Menu Section */
+.menu {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+/* Menu Heading (Hidden) */
+.menu h3 {
+    display: none;
+}
+
+/* Menu List */
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu ul li {
+  margin: 2px 0;
+  padding: 0;
+  transition: transform 0.3s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+
+.menu ul li:hover {
+    transform: translateX(5px);
+}
+
+/* Menu Links */
+.menu ul li a {
+  text-decoration: none;
+  color: #eee;        /* Light gray text - better contrast */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Dancing Script', cursive; /* Cursive font */
+  font-size: 1.1rem; /* Slightly larger font size */
+  font-weight: 500;   /* Slightly bolder */
+
+}
+
+/* Ripple Effect */
+.menu ul li a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: 0;
+}
+
+.menu ul li a:hover::before {
+    width: 250px;
+    height: 250px;
+}
+
+.menu ul li a i,
+.menu ul li a span {
+    position: relative;
+    z-index: 1;
+}
+
+.menu ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+   /* No color change on hover, keep light gray*/
+}
+
+.menu ul li i {
+  margin-right: 12px;
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+}
+
+/* Active Menu Item */
+.menu ul li a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+    border-radius: 8px;
+    color: #fff; /* White text for active link */
+    font-weight: 600; /* Bolder font for active link */
+}
+
+
+/* --- LOGOUT --- */
+.logout {
+  padding: 12px 15px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+  border-radius: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.logout i {
+  margin-right: 8px;
+  font-size: 17px;
+}
+
+/* --- CHAT SECTION --- */
+.chat-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f0f4f8;
+  position: relative;
+  border-radius: 0 10px 10px 0;
+  overflow: hidden;
+}
+
+/* Chat Header */
+.chat-header {
+  background: #fff;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+
+.chat-header:hover {
+  background: #f9f9f9;
+}
+
+.chat-header img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid #5e35b1;
+  transition: transform 0.4s ease-in-out;
+}
+
+.chat-header img:hover {
+  transform: rotate(360deg);
+}
+
+.chat-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Chat Messages Container */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f0f4f8;
+    position: relative;
+    margin-bottom: 70px;
+}
+
+/* Individual Message */
+.message {
+  display: inline-block;
+  max-width: 70%;
+  margin-bottom: 12px;
+  padding: 10px 15px;
+  border-radius: 18px;
+  line-height: 1.5;
+  font-size: 14.5px;
+  position: relative;
+  clear: both;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s, transform 0.2s;
+  word-wrap: break-word;
+}
+
+.message.sent {
+  background: #e2f7cb;
+  float: right;
+  border-bottom-right-radius: 4px;
+  text-align: right;
+}
+
+.message.received {
+  background: #fff;
+  float: left;
+  border-bottom-left-radius: 4px;
+  text-align: left;
+}
+
+.message .sender {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+  color: #444;
+}
+
+.message:hover {
+  transform: scale(1.01);
+}
+
+.message img.message-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 5px;
+    border-radius: 8px;
+    display: block;
+    cursor: pointer;
+}
+
+/* --- Image Modal --- */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.message .reaction-container {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.message .reaction-item {
+    display: inline-block;
+    background: #eee;
+    border-radius: 10px;
+    padding: 2px 5px;
+    margin-right: 4px;
+}
+
+.react-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #777;
+  margin-left: 8px;
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+.react-btn:hover {
+  color: #5e35b1;
+}
+
+/* --- Message Input Section --- */
+.message-input-section {
+  display: flex;
+  padding: 10px 15px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  align-items: center;
+    margin-bottom: 1rem;
+
+}
+
+.chat-tools {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.chat-tools button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 19px;
+  color: #5e35b1;
+  margin-right: 8px;
+  transition: color 0.3s ease;
+}
+
+.chat-tools button:hover {
+  color: #4527a0;
+}
+
+#fileInput {
+  display: none;
+}
+
+.preview-container {
+    margin-right: 8px;
+    display: none;
+    position: relative;
+    align-items: center;
+}
+
+.preview-container img {
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.preview-container .file-name {
+    font-size: 12px;
+    color: #555;
+    margin-right: 5px;
+}
+
+.preview-container .remove-preview {
+    background: #f00;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    cursor: pointer;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.chat-input:focus {
+  border-color: #5e35b1;
+}
+
+.send-btn {
+  width: 45px;
+  height: 45px;
+  background: #5e35b1;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 17px;
+}
+
+.send-btn:hover {
+  background: #4527a0;
+  transform: scale(1.05);
+}
+
+/* --- EMOJI PICKER --- */
+.emoji-picker {
+  position: absolute;
+  bottom: 55px;
+  left: 15px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 6px;
+  width: 280px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-wrap: wrap;
+  gap: 5px;
+  z-index: 1000;
+}
+
+.emoji-picker span {
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  padding: 2px;
+}
+
+.emoji-picker span:hover {
+  transform: scale(1.15);
+}
+
+
+.delete-btn {
+  background: none;
+  color: #ff4d4d;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.delete-btn:hover {
+  color: #cc0000;
+  text-decoration: underline;
+}
+
+.custom-context-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  display: none;
+  z-index: 1000;
+  border-radius: 5px;
+  min-width: 120px;
+}
+
+.custom-context-menu button {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  font-size: 14px;
+  padding: 5px 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.custom-context-menu button:hover {
+  background: #ffcccc;
+  color: #cc0000;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+/* Medium Devices (Tablets) */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+
+  .sidebar:hover {
+    width: 260px;
+  }
+
+  .sidebar:hover .profile-info,
+  .sidebar:hover .menu h3,
+  .sidebar:hover .menu ul li span {
+    display: flex;
+  }
+
+  .profile-section {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .profile-section img {
+    width: 35px;
+    height: 35px;
+    margin-right: 0;
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .menu h3 {
+    display: none; /* Hide by default */
+  }
+
+  .menu ul li {
+    margin: 5px 0;
+    padding: 8px;  /* Add padding back for icon-only view */
+    justify-content: center;
+  }
+
+  .menu ul li i {
+    margin-right: 0;
+  }
+
+  .menu ul li span {
+    display: none; /* Hide text by default */
+  }
+    /* Remove hover effects when sidebar is collapsed */
+  .menu ul li:hover {
+    transform: none; /* Remove transform */
+  }
+  .menu ul li a:hover::before{
+    width: 0;  /* Disable ripple */
+    height: 0;
+  }
+   /* Reset font styles when collapsed */
+    .menu ul li a {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+        font-size: inherit; /* Reset size */
+        font-weight: normal; /* Reset weight */
+    }
+
+    .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+
+
+  .logout {
+    padding: 8px;
+    margin: 10px 0;
+    justify-content: center;
+  }
+
+  .logout i {
+    margin-right: 0;
+  }
+
+  .chat-header .chat-title {
+    display: none;
+  }
+
+  .chat-header img {
+    margin-right: 8px;
+  }
+
+  .message {
+    max-width: 80%;
+  }
+
+  .chat-tools button {
+    margin-right: 2px;
+  }
+
+  .chat-input {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .emoji-picker {
+    width: 220px;
+    left: 2px;
+    bottom: 48px;
+  }
+
+  .chat-messages {
+      margin-bottom: 60px; /* Reduce bottom margin on tablet */
+  }
+
+  .message-input-section{
+      margin-bottom: 1rem;
+  }
+}
+
+/* Small Devices (Phones) */
+@media (max-width: 576px) {
+  .chat-container {
+    margin: 0; /* Remove margin completely on small screens*/
+    border-radius: 0;
+    box-shadow: none;
+    height: 100vh; /* Ensure full height */
+  }
+
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0;
+    z-index: 1000;
+    background: linear-gradient(145deg, #4a148c, #8e24aa); /* Keep gradient */
+  }
+  .sidebar:hover{
+    width: 100%; /* No hover effect on small screen */
+  }
+
+  .profile-section {
+    display: none;  /* Hide the profile section */
+  }
+
+  .sidebar .menu {
+    display: flex;
+    flex-direction: row; /* Horizontal menu */
+    flex: 1; /* Take up all available space */
+    padding: 0;
+  }
+
+  .sidebar .menu ul {
+    display: flex;
+    flex-direction: row; /* Horizontal list items */
+    flex: 1;            /* Distribute items evenly */
+    justify-content: space-around; /* Space items evenly */
+  }
+
+  .sidebar .menu ul li {
+    margin: 0;  /* Remove margins */
+    padding: 10px 0; /* Add some vertical padding */
+  }
+
+  .sidebar .menu ul li a{
+    padding: 10px;
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset to default */
+    font-size: inherit;
+    font-weight: normal;
+  }
+    .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+
+  .logout {
+    display: none; /* Hide the logout button */
+  }
+  .menu ul li:hover {
+    transform: none; /* Remove transform */
+  }
+  .menu ul li a:hover::before{
+    width: 0;  /* Disable ripple */
+    height: 0;
+  }
+  .chat-section {
+    border-radius: 0;
+    padding-bottom: 56px;  /* Adjust for the bottom navbar */
+  }
+  .message-input-section{
+      margin-bottom: 0; /*remove the margin*/
+  }
+
+  .chat-messages{
+      margin-bottom: 110px;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .emoji-picker {
+    bottom: auto; /* Reset bottom positioning */
+    top: 10px;
+    left: 5px;
+    right: 5px;
+    width: auto;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="sidebar">
+        <div class="profile-section" onclick="location.href='editProfile.html';" title="Go to Edit Profile">
+            <img src="https://via.placeholder.com/50" alt="Profile" id="sidebarProfileImage" />
+            <div class="profile-info">
+                <div class="name" id="currentUserName">Loading...</div>
+                <div class="email" id="currentUserEmail">Loading...</div>
+            </div>
+        </div>
+        <div class="menu">
+            <h3>Menu</h3>
+            <ul>
+                <li><a href="home.html" id="chatLink"><i class="fas fa-comments"></i><span>Chat</span></a></li><br>
+                <li><a href="notes.html" id="notesLink"><i class="fas fa-book"></i><span>Notes</span></a></li><br>
+                <li><a href="previousPapers.html" id="papersLink"><i class="fas fa-file-alt"></i><span>Previous Papers</span></a></li><br>
+                <li><a href="events.html" id="eventsLink"><i class="fas fa-calendar-alt"></i><span>Events</span></a></li><br>
+                <li><a href="internships.html" id="internshipsLink"><i class="fas fa-briefcase"></i><span>Internship</span></a></li><br>
+                <li><a href="leaderboard.html" id="leaderboardLink"><i class="fas fa-trophy"></i><span>Leaderboard</span></a></li><br>
+                <li><a href="editProfile.html" id="editProfileLink"><i class="fas fa-user-edit"></i><span>Edit Profile</span></a></li>
+            </ul>
+        </div>
+        <div class="logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <div class="chat-section">
+        <div class="chat-header">
+            <img src="https://via.placeholder.com/40" alt="Course Group" id="courseProfileImage" />
+            <div class="chat-title" id="chatTitle">StudyHub Group</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+        </div>
+
+        <div class="emoji-picker" id="emojiPicker"> </div>
+
+        <div class="message-input-section">
+            <div class="chat-tools">
+                <input type="file" id="fileInput" accept="image/*" />
+                <button id="imageBtn" title="Send Image">
+                    <i class="fas fa-image"></i>
+                </button>
+                <button class="emoji-btn" id="emojiBtn" title="Insert Emoji">
+                    <i class="fas fa-smile"></i>
+                </button>
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="previewImg" alt="Preview" />
+                <span class="file-name" id="fileNameDisplay"></span>
+                <span class="remove-preview" id="removePreview">&times;</span>
+            </div>
+
+            <input type="text" class="chat-input" id="messageInput" placeholder="Type a message..."
+                aria-label="Message Input" />
+            <button class="send-btn" id="sendMessageBtn" aria-label="Send Message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img src="" alt="Full Size Image">
+</div>
+
+
+<!-- WebSocket Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script>
+  let stompClient = null;
+  let currentUser = null;
+  let currentCourseId = null;
+  let currentRollNo = null;
+
+  // Keep a reference to any selected image
+  let selectedImageFile = null;
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        await fetchCurrentUser();
+    } catch (err) {
+        console.error("User fetch error:", err);
+       // window.location.href = "/login.html";
+        return;
+    }
+
+    if (currentCourseId) {
+        loadCourseMessages(currentCourseId);
+    }
+    connectWebSocketToCourse(currentCourseId);
+
+    document.getElementById("sendMessageBtn").addEventListener("click", sendChatMessage);
+    document.getElementById("messageInput").addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            sendChatMessage();
+        }
+    });
+
+    document.getElementById("imageBtn").addEventListener("click", () => {
+        document.getElementById("fileInput").click();
+    });
+
+    document.getElementById("fileInput").addEventListener("change", () => {
+        if (fileInput.files && fileInput.files[0]) {
+            selectedImageFile = fileInput.files[0];
+            showImagePreview(selectedImageFile);
+        }
+    });
+
+    document.getElementById("removePreview").addEventListener("click", clearImagePreview);
+
+    document.getElementById("emojiBtn").addEventListener("click", () => {
+        const emojiPicker = document.getElementById("emojiPicker");
+        emojiPicker.style.display = emojiPicker.style.display === "none" ? "flex" : "none";
+    });
+
+    populateEmojiPicker(document.getElementById("emojiPicker"));
+
+    highlightActiveLink();
+
+    // 👉 **Create a context menu for delete**
+    const contextMenu = document.createElement("div");
+    contextMenu.classList.add("custom-context-menu");
+    contextMenu.innerHTML = '<button id="deleteMessageOption">Delete</button>';
+    document.body.appendChild(contextMenu);
+
+    let selectedMessage = null;
+
+    document.addEventListener("contextmenu", (event) => {
+        const messageElement = event.target.closest(".message");
+        if (!messageElement) return;
+
+        event.preventDefault(); // Prevent default right-click menu
+
+        // Store the selected message
+        selectedMessage = messageElement;
+
+        // Position the context menu near the mouse click
+        contextMenu.style.top = `${event.clientY}px`;
+        contextMenu.style.left = `${event.clientX}px`;
+        contextMenu.style.display = "block";
+    });
+
+    document.getElementById("deleteMessageOption").addEventListener("click", () => {
+        if (selectedMessage) {
+            const messageId = selectedMessage.dataset.messageId;
+            if (confirm("Are you sure you want to delete this message?")) {
+                deleteMessage({ id: messageId, courseId: currentCourseId });
+            }
+        }
+        contextMenu.style.display = "none"; // Hide the menu after clicking
+    });
+
+    // Hide the menu when clicking outside
+    document.addEventListener("click", () => {
+        contextMenu.style.display = "none";
+    });
+});
+
+
+  /**
+   * Fetch current user
+   * Expecting JSON like:
+   *  {
+   *    "name": "Alice",
+   *    "email": "alice@example.com",
+   *    "courseId": "btech123",
+   *    "course": "B.Tech",
+   *    "rollNo": "B-01",
+   *    "bio": "This is my bio",
+   *    "profilePicture": "/uploads/StudentPP/profile_1234567890.jpg"
+   *  }
+   */
+  async function fetchCurrentUser() {
+    const res = await fetch('http://localhost:8080/api/students/current', {
+      credentials: 'include'
+    });
+    if (!res.ok) {
+      throw new Error('Not logged in');
+    }
+    const data = await res.json();
+    currentUser = data.name;
+    currentCourseId = data.courseId;
+    currentRollNo = data.rollNo;
+
+    // Update UI with user info
+    const nameEl = document.getElementById('currentUserName');
+    if (nameEl) nameEl.textContent = data.name || 'No Name';
+
+    const emailEl = document.getElementById('currentUserEmail');
+    if (emailEl) emailEl.textContent = data.email || 'No Email';
+
+    const courseProfileImageEl = document.getElementById('courseProfileImage');
+    if (courseProfileImageEl && data.profilePicture) {
+      const profilePicUrl = `${window.location.origin}${data.profilePicture}`;
+      courseProfileImageEl.src = profilePicUrl;
+    }
+
+    const chatTitleEl = document.getElementById('chatTitle');
+    if (chatTitleEl) {
+      if (data.course) {
+        chatTitleEl.textContent = `${data.course} Chat Group (Roll No: ${data.rollNo || 'N/A'})`;
+      } else {
+        chatTitleEl.textContent = 'StudyHub Group';
+      }
+    }
+
+    const sidebarProfileImageEl = document.getElementById('sidebarProfileImage');
+    if (sidebarProfileImageEl && data.profilePicture) {
+      const profilePicUrl = `${window.location.origin}${data.profilePicture}`;
+      sidebarProfileImageEl.src = profilePicUrl;
+    }
+  }
+
+  /**
+   * Load previous messages from the server (in ascending order)
+   */
+  async function loadCourseMessages(courseId) {
+    if (!courseId) return;
+    try {
+      // We'll request size=200 for a bigger window
+      const res = await fetch(`http://localhost:8080/api/chat/courses/${courseId}/messages?page=0&size=200`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const messages = await res.json();
+        const chatMessagesEl = document.getElementById('chatMessages');
+        if (chatMessagesEl) {
+          chatMessagesEl.innerHTML = '';
+          // messages are in ascending order (oldest first)
+          messages.forEach(msg => showMessage(msg, false));
+          // Scroll to bottom so the newest is visible
+          chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+      } else {
+        console.warn('Failed to load messages');
+      }
+    } catch (err) {
+      console.error('Error loading messages:', err);
+    }
+  }
+
+  /**
+   * Connect to WebSocket for real-time chat
+   */
+   function connectWebSocketToCourse(courseId) {
+    if (!courseId) return;
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, () => {
+      // Subscribe to a channel specific to this course
+      stompClient.subscribe(`/topic/courses/${courseId}`, (frame) => {
+        const data = JSON.parse(frame.body);
+  
+        // Check if it's a message or a delete notification
+        if (data.messageId && data.status === 'deleted') {
+          // Handle deleted message
+          const msgDiv = document.querySelector(`.message[data-message-id="${data.messageId}"]`);
+          if (msgDiv) {
+            msgDiv.remove(); // Or update it to show "[Message Deleted]"
+          }
+        } else {
+          // It's a regular message
+          showMessage(data, true);
+        }
+      });
+    });
+  }
+
+  /**
+   * Send text+image (if any) as one chat message
+   */
+   async function sendChatMessage() {
+    if (!stompClient || !currentCourseId) return;
+  
+    const msgInput = document.getElementById('messageInput');
+    const content = msgInput.value.trim();
+  
+    // Check if the message is empty and prevent sending
+    if (content === '' && !selectedImageFile) {
+      return; // Do nothing if both the message is empty and no image is selected
+    }
+  
+    // We unify text + image into a single request to the server
+    // Endpoint: POST /api/chat/courses/{courseId}/sendMessage
+    // We'll use FormData so we can attach an optional image
+  
+    const formData = new FormData();
+    formData.append('sender', currentUser);
+    formData.append('content', content);
+    if (selectedImageFile) {
+      formData.append('imageFile', selectedImageFile);
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:8080/api/chat/courses/${currentCourseId}/sendMessage`, {
+        method: 'POST',
+        body: formData
+      });
+  
+      if (response.ok) {
+        // The server returns the new ChatMessage
+        // const newMsg = await response.json();
+        // Broadcast over WebSocket
+        // stompClient.send(`/app/chat/courses/${currentCourseId}`, {}, JSON.stringify(newMsg));
+        // Clear input + preview
+        msgInput.value = '';
+        clearImagePreview();
+      } else {
+        const errData = await response.json();
+        alert('Send message failed: ' + (errData.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error sending message');
+    }
+  }
+  
+
+  /**
+   * Renders a single message in the UI
+   */
+   function showMessage(message, autoScroll) {
+    const chatMessagesEl = document.getElementById('chatMessages');
+    if (!chatMessagesEl) return;
+  
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message');
+    msgDiv.setAttribute('data-message-id', message.id); // Set message ID as data attribute
+    if (message.sender === currentUser) {
+      msgDiv.classList.add('sent');
+    } else {
+      msgDiv.classList.add('received');
+    }
+  
+    // Sender name if not me
+    if (message.sender !== currentUser) {
+      const senderSpan = document.createElement('span');
+      senderSpan.classList.add('sender');
+      senderSpan.textContent = message.sender;
+      msgDiv.appendChild(senderSpan);
+    }
+  
+    // Text content
+    if (message.content && message.content.trim() !== '') {
+      const textNode = document.createTextNode(message.content);
+      msgDiv.appendChild(textNode);
+    }
+  
+    // If there's an image, display it
+    if (message.image) {
+      const imgEl = document.createElement('img');
+      imgEl.classList.add('message-image');
+      imgEl.src = message.image;
+      msgDiv.appendChild(imgEl);
+    }
+  
+    // Reactions
+    if (message.reactions && Object.keys(message.reactions).length > 0) {
+      const reactionDiv = document.createElement('div');
+      reactionDiv.classList.add('reaction-container');
+      for (const [user, emoji] of Object.entries(message.reactions)) {
+        const span = document.createElement('span');
+        span.classList.add('reaction-item');
+        span.textContent = `${user}: ${emoji}`;
+        reactionDiv.appendChild(span);
+      }
+      msgDiv.appendChild(reactionDiv);
+    }
+  
+    // Reaction button
+    const reactBtn = document.createElement('button');
+    reactBtn.classList.add('react-btn');
+    reactBtn.textContent = 'React';
+    reactBtn.addEventListener('click', () => {
+      // Show a minimal prompt or an advanced picker
+      const rEmoji = prompt('Type an emoji reaction:');
+      if (rEmoji) {
+        sendReaction(message, rEmoji);
+      }
+    });
+    msgDiv.appendChild(reactBtn);
+  
+    // Delete button (only for own messages within 5 minutes)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.textContent = 'Delete';
+  
+    // Check if the message is sent by the current user and is within 5 minutes
+    const fiveMinutesAgo = Date.now() - (5 * 60 * 1000);
+    if (message.sender === currentUser && new Date(message.timestamp).getTime() > fiveMinutesAgo) {
+      deleteBtn.style.display = 'inline-block'; // Show the button
+    } else {
+      deleteBtn.style.display = 'none'; // Hide the button
+    }
+  
+    deleteBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete this message?')) {
+        deleteMessage(message);
+      }
+    });
+  
+    // ** Append the deleteBtn to the msgDiv **
+    msgDiv.appendChild(deleteBtn); 
+  
+    // ** Append the msgDiv to the chatMessagesEl **
+    chatMessagesEl.appendChild(msgDiv);
+  
+    if (autoScroll) {
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+  } 
+  /**
+   * Send delete request to the server
+   */
+   async function deleteMessage(message) {
+    try {
+        const deleteUrl = `http://localhost:8080/api/chat/courses/${message.courseId}/messages/${message.id}?sender=${currentUser}`;
+        
+        const res = await fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (res.ok) {
+            // Remove the message from the UI
+            const msgDiv = document.querySelector(`.message[data-message-id="${message.id}"]`);
+            if (msgDiv) {
+                msgDiv.remove();
+            }
+        } else {
+            const errorData = await res.json();
+            alert(`Failed to delete message: ${errorData.error || 'Unknown error'}`);
+        }
+
+    } catch (err) {
+        console.error("Error deleting message:", err);
+        alert('Failed to delete message. See console for details.');
+    }
+}
+
+  
+
+  /**
+   * Send reaction to the server
+   */
+  async function sendReaction(message, emoji) {
+    try {
+      const reactUrl = `http://localhost:8080/api/chat/courses/${message.courseId}/messages/${message.id}/react`;
+      const res = await fetch(reactUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: currentUser, emoji: emoji })
+      });
+      if (res.ok) {
+        // We get back the updated message with new reactions
+        // const updatedMsg = await res.json();
+        // Broadcast the updated message so everyone sees the reaction
+        // stompClient.send(`/app/chat/courses/${updatedMsg.courseId}`, {}, JSON.stringify(updatedMsg));
+      } else {
+        alert('Reaction failed');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /**
+   * Show image preview
+   */
+  function showImagePreview(file) {
+    const previewContainer = document.getElementById('previewContainer');
+    const previewImg = document.getElementById('previewImg');
+    if (!file) {
+      previewContainer.style.display = 'none';
+      return;
+    }
+
+    // Read file as DataURL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImg.src = e.target.result;
+      previewContainer.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /**
+   * Clear the selected image
+   */
+  function clearImagePreview() {
+    selectedImageFile = null;
+    const fileInput = document.getElementById('fileInput');
+    fileInput.value = '';
+    const previewContainer = document.getElementById('previewContainer');
+    previewContainer.style.display = 'none';
+  }
+
+  /**
+   * Populate emoji picker
+   */
+  function populateEmojiPicker(emojiPickerEl) {
+    const emojis = [
+      '😀','😃','😄','😁','😆','😅','🤣','😂',
+      '🙂','🙃','😉','😊','😇','🥰','😍','🤩',
+      '😘','😗','😚','😋','😜','🤪','😝','😎',
+      '🤗','🤭','🤫','🤔','🤐','🤨','😐','😑',
+      '😶','🙄','😏','😣','😥','😮','🤐','😪',
+      '😴','😷','🤒','🤕','🤢','🤮','🤧','😵',
+      '🥵','🥶','😱','😰','😥','😓','🤠','😎',
+      '😡','😠','🤬','😔','😞','😟','😢','😭',
+      '😲','😳','🥺','😦','😧','😨','😩','🤯',
+      '😬','😰','🥱','🤤','😪','😵','🤑','😴',
+      '🥳','🤠','😈','👿','💀','☠','👻','👽',
+      // You can add more or use a dedicated library
+    ];
+    emojis.forEach(emoji => {
+      const span = document.createElement('span');
+      span.textContent = emoji;
+      span.addEventListener('click', () => {
+        const msgInput = document.getElementById('messageInput');
+        msgInput.value += emoji; // append to the input
+        emojiPickerEl.style.display = 'none'; // hide after selection
+        msgInput.focus();
+      });
+      emojiPickerEl.appendChild(span);
+    });
+  }
+
+  function logout() {
+    // Clear session or call a logout endpoint
+    window.location.href = '/login.html';
+  }
+
+  function highlightActiveLink() {
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.menu ul li a').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+</script>
+</body>
+</html>

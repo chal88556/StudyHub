@@ -1,0 +1,1247 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>StudyHub Notes</title>
+
+    <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+  /* General Body Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f8f9fa;
+  color: #343a40;
+  overflow: hidden;
+}
+
+/* Main Container */
+.chat-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(145deg, #4a148c, #8e24aa);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  border-radius: 10px 0 0 10px;
+  overflow: hidden;
+}
+
+.sidebar:hover {
+  width: 300px;
+}
+
+.profile-section {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-section:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid #fff;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img:hover {
+  transform: scale(1.05);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info .name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.profile-info .email {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Menu Section */
+.menu {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+/* Menu Heading (Hidden) */
+.menu h3 {
+    display: none;
+}
+
+/* Menu List */
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu ul li {
+  margin: 2px 0;
+  padding: 0;
+  transition: transform 0.3s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+
+.menu ul li:hover {
+    transform: translateX(5px);
+}
+
+/* Menu Links */
+.menu ul li a {
+  text-decoration: none;
+  color: #eee;        /* Light gray text - better contrast */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Dancing Script', cursive; /* Cursive font */
+  font-size: 1.1rem; /* Slightly larger font size */
+  font-weight: 500;   /* Slightly bolder */
+
+}
+
+/* Ripple Effect */
+.menu ul li a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: 0;
+}
+
+.menu ul li a:hover::before {
+    width: 250px;
+    height: 250px;
+}
+
+.menu ul li a i,
+.menu ul li a span {
+    position: relative;
+    z-index: 1;
+}
+
+.menu ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+   /* No color change on hover, keep light gray*/
+}
+
+.menu ul li i {
+  margin-right: 12px;
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+}
+
+/* Active Menu Item */
+.menu ul li a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+    border-radius: 8px;
+    color: #fff; /* White text for active link */
+    font-weight: 600; /* Bolder font for active link */
+}
+
+
+/* --- LOGOUT --- */
+.logout {
+  padding: 12px 15px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+  border-radius: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.logout i {
+  margin-right: 8px;
+  font-size: 17px;
+}
+/* --- Content Area (Generic) --- */
+.content-area { /* Use this for your main content area */
+    flex: 1;
+    padding: 30px 40px;
+    background: #f4f6f9; /* Keep the background from your original CSS */
+    overflow-y: auto;
+}
+
+/* --- Responsive Design --- */
+/* Medium Devices (Tablets) */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px; /* Icon-only sidebar */
+    overflow: hidden; /* Hide text */
+  }
+
+  .sidebar:hover {
+    width: 260px; /* Expand on hover */
+  }
+
+  .sidebar:hover .profile-info,
+  .sidebar:hover .menu h3,
+  .sidebar:hover .menu ul li span {
+    display: flex; /* Show text on hover */
+  }
+
+  .profile-section {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .profile-section img {
+    width: 35px;
+    height: 35px;
+    margin-right: 0;
+  }
+
+  .profile-info {
+    display: none; /* Hide by default */
+  }
+
+  .menu h3 {
+    display: none; /* Hide */
+  }
+
+ .menu ul li {
+    margin: 5px 0;  /* Reduced margin */
+    padding: 8px;   /* Reduced padding */
+    justify-content: center; /* Center icon */
+  }
+  .menu ul li i {
+        margin-right: 0; /* Remove margin */
+  }
+   .menu ul li span{
+        display: none;
+    }
+
+    /* Remove hover effects when sidebar is collapsed */
+    .menu ul li:hover {
+        transform: none; /* Remove transform */
+    }
+    .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+    }
+
+    /* Reset font styles when collapsed */
+    .menu ul li a {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+        font-size: inherit; /* Reset size */
+        font-weight: normal; /* Reset weight */
+    }
+
+  .logout {
+    padding: 8px;
+    margin: 10px 0;
+    justify-content: center;
+  }
+
+  .logout i {
+    margin-right: 0;
+  }
+
+  /* Adjust padding for content area */
+  .content-area {
+    padding: 20px;
+  }
+   .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+}
+
+
+/* Small Devices (Phones) */
+@media (max-width: 576px) {
+ .chat-container {
+        margin: 0;  /* Smaller margin */
+        border-radius: 0; /* No rounded corners */
+       /* box-shadow: none; Remove box-shadow on very small screens */
+        height: 100vh; /* Ensure full height */
+  }
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0;
+    z-index: 1000;
+    background: linear-gradient(145deg, #4a148c, #8e24aa);
+  }
+
+ .sidebar:hover{
+      width: 100%;
+    }
+  .profile-section {
+    display: none;  /* Hide profile */
+  }
+
+  .sidebar .menu {
+    display: flex;
+    flex-direction: row; /* Horizontal */
+    flex: 1; /* Take available space */
+    padding: 0;
+  }
+
+  .sidebar .menu ul {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-around;
+  }
+
+  .sidebar .menu ul li {
+    margin: 0;
+    padding: 10px 0;
+  }
+
+  .sidebar .menu ul li a{
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: inherit;
+    font-weight: normal;
+  }
+ .menu ul li:hover {
+    transform: none; /* Remove transform */
+  }
+  .menu ul li a:hover::before{
+    width: 0;  /* Disable ripple */
+    height: 0;
+  }
+  .logout {
+    display: none; /* Hide logout */
+  }
+   .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+
+  /* Adjust content area for bottom nav */
+  .content-area {
+      padding-bottom: 60px;  /* Add padding to avoid overlap */
+  }
+}
+
+/*--- Your Notes Page Specific Styles (Keep these AS IS) ---*/
+
+/* Notes Grid */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+.note-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .note-card h4 {
+    margin-top: 0;
+    color: #6a11cb;
+    font-size: 1.4rem;
+    font-weight: 500;
+    word-wrap: break-word;
+  }
+
+  .note-card p {
+    color: #555;
+    flex-grow: 1;
+    word-wrap: break-word;
+    margin-bottom: 15px;
+  }
+
+   .card-actions {
+    display: flex;
+    gap: 10px;
+  }
+ .card-actions a,
+  .card-actions button {
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .download-btn {
+    background: #28a745;
+  }
+
+  .download-btn:hover {
+    background: #218838;
+    transform: scale(1.05);
+  }
+
+  .preview-btn {
+    background: #007bff;
+  }
+
+  .preview-btn:hover {
+    background: #0069d9;
+    transform: scale(1.05);
+  }
+
+/* PDF Preview Modal */
+  .modal-lg {
+    max-width: 90% !important;
+  }
+
+ .modal-body {
+    padding: 0;
+  }
+
+  iframe#pdfFrame {
+    width: 100%;
+    height: 80vh;
+    border: none;
+  }
+  /* Chatbot Icon */
+  #chatbot-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    animation: pop-in 0.5s ease-out;
+  }
+
+ #chatbot-icon i {
+    /* Style the icon directly */
+    font-size: 40px;
+    /* Adjust icon size as needed */
+    color: #12d99d;
+    /* Set the icon color */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+
+  #chatbot-icon:hover i {
+    /* Hover effect */
+    transform: scale(1.1);
+  }
+  /* Chatbot Window */
+  #chatbot-window {
+    position: fixed;
+    bottom: -500px;/* Start off-screen */
+    right: 20px;
+    width: 350px;
+    border: none;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: bottom 0.5s ease-out;
+    /* Animate the 'bottom' property */
+  }
+
+  #chatbot-window.show {
+    bottom: 90px;
+    /* Slide up to the desired position */
+  }
+
+ .chatbot-header {
+    background-color: #4A6572;
+    color: #fff;
+    padding: 12px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chatbot-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: #f8f9fa;
+  }
+
+  .chatbot-input {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #dee2e6;
+  }
+
+  #chatbot-user-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+
+  #chatbot-send-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #chatbot-send-button:hover {
+    background-color: #2980b9;
+  }
+
+  /* Messages */
+  .user-message,
+  .bot-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+  }
+
+  .user-message {
+    background-color: #e2f0cb;
+    color: #383d41;
+    align-self: flex-end;
+  }
+
+  .bot-message {
+    background-color: #f0f0f5;
+    color: #282c34;
+    align-self: flex-start;
+  }
+
+  .bot-message p {
+    margin-bottom: 5px;
+    /* Space between paragraphs */
+  }
+
+  .user-message p,
+  .bot-message p {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  /* Code block formatting */
+  .bot-message pre {
+    background-color: #282c34;
+    /* Dark background */
+    color: #abb2bf;
+    /* Light text */
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    /* Wrap lines */
+    font-size: 0.9em;
+    /* Smaller font size */
+  }
+
+  .bot-message code {
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre;
+    /* Preserve spaces and line breaks */
+  }
+
+  /* Lists */
+  .bot-message ul,
+  .bot-message ol {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    /* Indent */
+  }
+
+  .bot-message li {
+    margin-bottom: 5px;
+  }
+
+  /* Headings */
+  .bot-message h1,
+  .bot-message h2,
+  .bot-message h3,
+  .bot-message h4,
+  .bot-message h5,
+  .bot-message h6 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  /* Bold text */
+  .bot-message strong {
+    font-weight: bold;
+  }
+
+  /* Language-specific styles (syntax highlighting) */
+  .language-java {
+    color: #e06c75;
+    /* Customize as needed */
+  }
+
+  .language-python {
+    color: #61afef;
+    /* Customize as needed */
+  }
+
+  .chatbot-messages::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .chatbot-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .chatbot-messages::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+  }
+
+  .chatbot-messages::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+
+  /* Keyframes for pop-in animation */
+  @keyframes pop-in {
+    0% {
+        transform: scale(0);
+    }
+
+    70% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+  }
+  /* Modal Styles for Chatbot Visibility */
+  .modal-open #chatbot-icon {
+    z-index: 1060;
+    /* Ensure icon is above modal */
+  }
+
+  .modal-open #chatbot-window {
+    z-index: 1070;
+    /* Ensure window is above modal */
+  }
+
+  /* Ensure the input and button within the chatbot are clickable */
+  .modal-open #chatbot-user-input,
+  .modal-open #chatbot-send-button {
+    pointer-events: auto;
+    /* Allow interaction */
+  }
+
+   /* Responsive */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 70px;  /* Icon-only sidebar */
+            overflow: hidden; /* Hide text */
+        }
+        .sidebar:hover{
+          width: 260px;
+        }
+
+        .sidebar:hover .profile-info,
+        .sidebar:hover .menu h3,
+        .sidebar:hover .menu ul li span {
+            display: flex; /* Show text on hover */
+        }
+
+
+        .profile-section {
+            padding: 10px; /* Smaller padding */
+            justify-content: center; /* Center the profile image */
+        }
+
+        .profile-section img {
+            width: 35px; /* Smaller image */
+            height: 35px;
+            margin-right: 0; /* Remove margin */
+        }
+
+        .profile-info {
+            display: none; /* Hide profile info by default */
+
+        }
+
+        .menu h3 {
+            display: none; /* Hide heading by default*/
+
+        }
+
+        .menu ul li {
+            margin: 5px 0;  /* Reduced margin */
+            padding: 8px;   /* Reduced padding */
+            justify-content: center; /* Center icon */
+        }
+
+        .menu ul li i {
+            margin-right: 0; /* Remove margin */
+        }
+         .menu ul li span{
+            display: none;
+        }
+
+        .logout {
+            padding: 8px;      /* Reduced padding */
+            margin: 10px 0; /* Reduced margin */
+            justify-content: center; /* Center icon */
+        }
+
+        .logout i {
+            margin-right: 0; /* Remove margin */
+        }
+         /* Remove hover effects when sidebar is collapsed */
+      .menu ul li:hover {
+        transform: none; /* Remove transform */
+      }
+      .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+      }
+       /* Reset font styles when collapsed */
+        .menu ul li a {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+            font-size: inherit; /* Reset size */
+            font-weight: normal; /* Reset weight */
+        }
+
+        .menu ul li a.active {
+          font-weight: normal; /*remove the bolder on active when it collapse */
+        }
+
+
+        /* Adjust padding for content area */
+        .content-area {
+            padding: 20px;
+        }
+         /* Adjust grid for smaller screens */
+        .notes-grid {
+            grid-template-columns: 1fr; /* Single column */
+        }
+
+        /* Adjust chatbot window for smaller screens */
+        #chatbot-window {
+            width: 90%;
+            right: 5%;
+            bottom: 70px;
+        }
+
+    }
+
+
+    /* Small Devices (Phones) */
+    @media (max-width: 576px) {
+        .chat-container {
+            margin: 0;  /* Remove margin */
+            border-radius: 0;
+            box-shadow: none;
+            height: 100vh; /* Full height*/
+        }
+
+        .sidebar {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: auto;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 0;
+            z-index: 1000;
+            background: linear-gradient(145deg, #4a148c, #8e24aa);
+        }
+        .sidebar:hover{
+            width: 100%; /*remove hover*/
+        }
+        .profile-section{
+          display: none;
+        }
+        .sidebar .menu{
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          padding: 0;
+        }
+        .sidebar .menu ul {
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          justify-content: space-around;
+        }
+        .sidebar .menu ul li{
+          margin: 0;
+
+        }
+         .sidebar .menu ul li a{
+            padding: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: inherit;
+            font-weight: normal;
+        }
+        .logout{
+          display: none;
+        }
+        /* Remove hover effects when sidebar is collapsed */
+      .menu ul li:hover {
+        transform: none; /* Remove transform */
+      }
+      .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+      }
+        .menu ul li a.active {
+            font-weight: normal; /*remove the bolder on active when it collapse */
+        }
+           /* Adjust content area for bottom nav */
+        .content-area{
+            padding-bottom: 56px;  /* Add padding */
+        }
+    }
+</style>
+
+  </head>
+  <body>
+    <div class="chat-container">
+        <div class="sidebar">
+            <div class="profile-section">
+                <img src="" alt="Profile" id="sidebarProfileImage" />
+                <div class="profile-info">
+                    <div class="name" id="currentUserName">Loading...</div>
+                    <div class="email" id="currentUserEmail">Loading...</div>
+                </div>
+            </div>
+            <div class="menu">
+                <h3>Menu</h3>
+                <ul>
+                    <li><a href="home.html"><i class="fas fa-comments"></i><span> Chat</span></a></li><br>
+                    <li><a href="notes.html" class="active"><i class="fas fa-book"></i><span> Notes</span></a></li><br>
+                    <li><a href="previousPapers.html"><i class="fas fa-file-alt"></i><span> Previous Papers</span></a>
+                    </li><br>
+                    <li><a href="events.html"><i class="fas fa-calendar-alt"></i><span> Events</span></a></li><br>
+                    <li><a href="internships.html"><i class="fas fa-briefcase"></i><span> Internship</span></a></li><br>
+                    <li><a href="leaderboard.html"><i class="fas fa-trophy"></i><span> Leaderboard</span></a></li><br>
+                    <li><a href="editProfile.html"><i class="fas fa-user-edit"></i><span> Edit Profile</span></a></li>
+                </ul>
+            </div>
+            <div class="logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <h2 id="notesHeader">StudyHub Notes</h2>
+            <div class="notes-grid" id="notesGrid">
+            </div>
+        </div>
+    </div>
+
+    <div id="chatbot-icon">
+        <i class="fa-solid fa-clipboard-question" style="color: #12d99d;"></i>
+    </div>
+
+    <div id="chatbot-window">
+        <div class="chatbot-header">
+            <h2 style="text-align: center">Study AI</h2>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-user-input" placeholder="Type your message...">
+            <button id="chatbot-send-button">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">PDF Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="" id="pdfFrame"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let currentCourseDirectory = "";
+        let currentCourseName = "StudyHub";
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const userData = await fetchCurrentUser();
+                document.getElementById('currentUserName').textContent = userData.name || 'No Name';
+                document.getElementById('currentUserEmail').textContent = userData.email || 'No Email';
+
+                if (userData.profilePicture) {
+                    document.getElementById('sidebarProfileImage').src = userData.profilePicture;
+                }
+
+                currentCourseName = userData.course || "StudyHub";
+                currentCourseDirectory = mapCourseToDir(userData.course);
+
+                document.getElementById('notesHeader').textContent = `${currentCourseName} Notes`;
+
+                setActiveMenuItem('notes.html');
+                loadNotes();
+            } catch (err) {
+                console.error(err);
+                window.location.href = '/login.html';
+            }
+        });
+
+        function mapCourseToDir(courseName) {
+            if (!courseName) return "general";
+            return courseName.replace(/[^a-zA-Z0-9]/g, "");
+        }
+
+        async function fetchCurrentUser() {
+            const res = await fetch('http://localhost:8080/api/students/current', {
+                credentials: 'include'
+            });
+            if (!res.ok) {
+                throw new Error('Not logged in');
+            }
+            return await res.json();
+        }
+
+        async function loadNotes() {
+            try {
+                const res = await fetch(`http://localhost:8080/api/files/notes?course=${currentCourseDirectory}`, {
+                    credentials: 'include'
+                });
+                if (!res.ok) {
+                    document.getElementById('notesGrid').innerHTML = '<p>No notes available.</p>';
+                    return;
+                }
+                const files = await res.json();
+                renderNotes(files);
+            } catch (error) {
+                console.error('Error loading notes:', error);
+                document.getElementById('notesGrid').innerHTML = '<p>Error loading notes. Please try again later.</p>';
+            }
+        }
+
+        function renderNotes(files) {
+            const notesGrid = document.getElementById('notesGrid');
+            notesGrid.innerHTML = '';
+
+            if (!files || !files.length) {
+                notesGrid.innerHTML = '<p>No notes available for your course.</p>';
+                return;
+            }
+
+            files.forEach(file => {
+                const noteCard = document.createElement('div');
+                noteCard.classList.add('note-card');
+
+                const titleEl = document.createElement('h4');
+                titleEl.textContent = file.title || removeExtension(file.filename);
+                noteCard.appendChild(titleEl);
+
+                const desc = document.createElement('p');
+                desc.textContent = 'Description about ' + removeExtension(file.filename);
+                noteCard.appendChild(desc);
+
+                const actions = document.createElement('div');
+                actions.classList.add('card-actions');
+
+                const previewBtn = document.createElement('button');
+                previewBtn.classList.add('preview-btn');
+                previewBtn.innerHTML = '<i class="fas fa-eye"></i> Preview';
+                previewBtn.addEventListener('click', () => {
+                    const pdfUrl = `/uploads/Notes/${currentCourseDirectory}/${file.filename}`;
+                    document.getElementById('pdfFrame').src = pdfUrl;
+                    document.getElementById('previewModalLabel').textContent = file.title || removeExtension(file.filename);
+
+                    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+                    previewModal.show();
+                });
+                actions.appendChild(previewBtn);
+
+                const downloadBtn = document.createElement('a');
+                downloadBtn.href = `/uploads/Notes/${currentCourseDirectory}/${file.filename}`;
+                downloadBtn.download = file.filename;
+                downloadBtn.classList.add('download-btn');
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+                actions.appendChild(downloadBtn);
+
+                noteCard.appendChild(actions);
+
+                notesGrid.appendChild(noteCard);
+            });
+        }
+
+        function removeExtension(filename) {
+            return filename.replace(/\.[^/.]+$/, '');
+        }
+
+        function logout() {
+            window.location.href = '/login.html';
+        }
+
+        function setActiveMenuItem(currentPage) {
+            const menuLinks = document.querySelectorAll('.sidebar .menu ul li a');
+            menuLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        const chatbotIcon = document.getElementById('chatbot-icon');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotUserInput = document.getElementById('chatbot-user-input');
+        const chatbotSendButton = document.getElementById('chatbot-send-button');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+
+        // Ensure the chatbot input is focused when the chatbot window is opened or modal is closed
+        chatbotIcon.addEventListener('click', () => {
+            const isChatbotVisible = chatbotWindow.classList.toggle('show');
+            if (isChatbotVisible) {
+                chatbotUserInput.focus();
+            }
+        });
+
+        // When a modal is hidden, focus on the chatbot input if it's open
+        $(document).on('hidden.bs.modal', function (e) {
+            if ($('#chatbot-window').hasClass('show')) {
+                $('#chatbot-user-input').focus();
+            }
+        });
+
+        // Handle chatbot send button click using a delegated event handler
+        $(document).on('click', '#chatbot-send-button', sendChatbotMessage);
+
+        chatbotUserInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendChatbotMessage();
+            }
+        });
+
+        function sendChatbotMessage() {
+          const message = chatbotUserInput.value;
+          chatbotUserInput.value = '';
+      
+          addMessageToChat('user', message); // Corrected function name
+      
+          fetch('http://localhost:8080/api/chatbot', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ message: message })
+          })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Failed to fetch chatbot response.');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  addMessageToChat('bot', data);
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  addMessageToChat('bot', 'Sorry, something went wrong.');
+              });
+      }
+      // Sending user message to the chatbot API
+      document.getElementById('chatbot-send-button').addEventListener('click', async () => {
+        const userInput = document.getElementById('chatbot-user-input').value;
+    
+        if (userInput.trim() === '') return; // Avoid sending empty messages
+    
+        // Add the user's message to the chat window
+        addMessageToChat('user', userInput);
+    
+        // Clear the input field
+        document.getElementById('chatbot-user-input').value = '';
+    
+        try {
+            // Send the message to your chatbot API
+            const response = await fetch('http://localhost:8080/api/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            });
+    
+            if (response.ok) {
+                // Parse the response as JSON
+                const responseData = await response.json();
+    
+                // Check if the response has a 'result' field
+                if (responseData && responseData.result) {
+                    // Display only the 'result' value
+                    addMessageToChat('bot', responseData.result);
+                } else {
+                    console.error('Chatbot API error: Response is missing the "result" field.');
+                    addMessageToChat('bot', 'Error: Invalid response from chatbot API.');
+                }
+            } else {
+                addMessageToChat('bot', 'Error: Unable to connect to chatbot');
+            }
+        } catch (error) {
+            console.error('Chatbot API error:', error);
+            addMessageToChat('bot', 'Error: Something went wrong');
+        }
+    });
+      //Function to add message on chatbot with some formate's
+      function addMessageToChat(sender, message) {
+        const chatWindow = document.getElementById('chatbot-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    
+        if (typeof message === 'string') {
+            messageDiv.innerHTML = `<p>${message.replace(/\n/g, '<br>')}</p>`;
+        } else {
+            let formattedResult = message.result;
+    
+            // Remove the privacy message (BEFORE ANY FORMATTING)
+            const privacyMessage = "Hello! I'm a language model that you can interact with in a privacy-focused manner..."; // Add the full privacy message here
+            formattedResult = formattedResult.replace(privacyMessage, '').trim();
+    
+            // 1. Code Blocks: Use a simpler approach with <pre> and <code>
+            formattedResult = formattedResult.replace(/`(\w+)?\s*([\s\S]*?)`/g, (match, p1, p2) => {
+                const languageClass = p1 ? `language-${p1}` : '';
+                return `<pre><code class="${languageClass}">${p2.trim()}</code></pre>`;
+            });
+    
+            // 2. Paragraphs: Wrap lines in <p> tags
+            formattedResult = formattedResult.split(/\n\s*\n/).map(paragraph => {
+                paragraph = paragraph.trim();
+                // Only add <br> if not inside <pre> or <code> tags and replace multiple spaces with single space
+                paragraph = paragraph.replace(/([^\n])\n([^\n])/g, '$1<br>$2');
+                paragraph = paragraph.replace(/\s+/g, ' ');
+                return `<p>${paragraph}</p>`;
+            }).join('');
+    
+            // 3. Numbered Lists
+            formattedResult = formattedResult.replace(/^(\s*)\d+\.\s+(.*)$/gm, '$1<p><li>$2</li></p>');
+            if (formattedResult.includes('<p><li>')) {
+                formattedResult = `<ol>${formattedResult.replace(/<p><li>/g, '<li>').replace(/<\/p>/g, '')}</ol>`;
+            }
+    
+            // 4. Bulleted Lists
+            formattedResult = formattedResult.replace(/^(\s*)[\-\*•]\s+(.*)$/gm, '$1<p><li>$2</li></p>');
+            if (formattedResult.includes('<p><li>')) {
+                formattedResult = `<ul>${formattedResult.replace(/<p><li>/g, '<li>').replace(/<\/p>/g, '')}</ul>`;
+            }
+    
+            // 5. Headings
+            formattedResult = formattedResult.replace(/^(\s*)\d+\.\s*(.+):$/gm, '$1<p><h4>$2</h4></p>');
+    
+            // 6. Bold Text
+            formattedResult = formattedResult.replace(/\*\*(.+?)\*\*/g, '<p><strong>$1</strong></p>');
+    
+            messageDiv.innerHTML = formattedResult;
+        }
+    
+        chatWindow.appendChild(messageDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    </script>
+  </body>
+  </html> 

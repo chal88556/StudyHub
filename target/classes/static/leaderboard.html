@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub Leaderboard</title>
+    <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* --- Your existing CSS --- */
+          /* --- Base Styles (Consistent with Main Style) --- */
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #343a40;
+            overflow-x: hidden;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+        }
+
+        /* --- Sidebar (Consistent with Main Style) --- */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(145deg, #4a148c, #8e24aa);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            border-radius: 10px 0 0 10px;
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 300px;
+        }
+
+        .profile-section {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-section:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 2px solid #fff;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section img:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-info .name {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .profile-info .email {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* --- Menu (Consistent with Main Style) --- */
+        .menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .menu h3 {
+            display: none; /* Hide */
+        }
+
+        .menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li {
+            margin: 2px 0;
+            padding: 0;
+            transition: transform 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #eee;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+            overflow: hidden;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Use main font */
+            font-size: 1rem;  /*Consistent font size*/
+            font-weight: 500;
+        }
+         .menu ul li a span {
+            font-family: 'Dancing Script', cursive; /* Apply cursive to span */
+        }
+
+
+        /* Ripple Effect (from Main Style) */
+        .menu ul li a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+
+        .menu ul li a:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+
+          .menu ul li a i,
+        .menu ul li a span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu ul li i {
+            margin-right: 12px;
+            font-size: 17px;
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Active Menu Item (from Main Style) */
+        .menu ul li a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* --- Logout (Consistent with Main Style) --- */
+        .logout {
+            padding: 12px 15px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px;
+            border-radius: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .logout i {
+            margin-right: 8px;
+            font-size: 17px;
+        }
+
+        /* --- Content Area (Adapted) --- */
+        .content-area {
+            flex: 1;
+            padding: 15px;  /*Consistent padding*/
+            background: #f0f4f8;
+            overflow-y: auto;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .content-area h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px; /* Consistent padding */
+            border-bottom: 1px solid #e0e0e0; /* Consistent style */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Consistent style */
+        }
+
+        /* --- Leaderboard Table (Adapted) --- */
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+    border-radius: 10px; /* Consistent rounding */
+    overflow: hidden; /* Ensure rounded corners work with border */
+     margin: 15px; /* Consistent spacing */
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Subtle separator */
+}
+
+.leaderboard-table th {
+    background-color: #5e35b1; /* Use the primary color */
+    color: white;
+    font-weight: 600; /* Consistent font weight */
+    text-transform: uppercase; /* Make headers uppercase */
+}
+
+.leaderboard-table tr:nth-child(even) {
+    background-color: #f8f9fa; /* Use the body background color */
+}
+         .leaderboard-table tr:hover {
+                background-color: #e2e6ea;/*Lighter on hover */
+        }
+
+
+        /* --- Responsive (Adapted from Main Style) --- */
+
+         @media (max-width: 992px) {
+             .sidebar {
+                 width: 70px;
+                 overflow: hidden;
+             }
+
+             .sidebar:hover {
+                 width: 260px;
+             }
+
+              .sidebar:hover .profile-info,
+             .sidebar:hover .menu h3,
+             .sidebar:hover .menu ul li span {
+                 display: flex;
+             }
+             .profile-section {
+              padding: 10px;
+                 justify-content: center;
+             }
+
+             .profile-section img {
+                 width: 35px;
+                 height: 35px;
+                 margin-right: 0;
+             }
+
+             .profile-info {
+                 display: none;
+             }
+
+             .menu h3 {
+                  display: none; /* Hide */
+             }
+
+             .menu ul li {
+                 margin: 5px 0;
+                 padding: 8px;
+                 justify-content: center;
+             }
+
+             .menu ul li i {
+                 margin-right: 0;
+             }
+
+             .menu ul li span {
+                 display: none; /* Hide text */
+             }
+              /* Remove hover effects when collapsed */
+             .menu ul li:hover {
+                 transform: none; /* Remove transform */
+             }
+             .menu ul li a:hover::before{
+                 width: 0;  /* Disable ripple */
+                 height: 0;
+             }
+              /* Reset font styles when collapsed */
+             .menu ul li a {
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+                 font-size: inherit; /* Reset size */
+                 font-weight: normal; /* Reset weight */
+             }
+              .menu ul li a.active {
+                 font-weight: normal; /*remove the bolder on active when it collapse */
+             }
+
+             .logout {
+                 padding: 8px;
+                 margin: 10px 0;
+                 justify-content: center;
+             }
+
+             .logout i {
+                 margin-right: 0;
+             }
+             .content-area {
+                  padding: 15px; /*Consistent padding*/
+
+             }
+
+         }
+
+         @media (max-width: 576px) {
+             .chat-container {
+                 margin: 0;
+                 border-radius: 0;
+                 box-shadow: none;
+                 height: 100vh;
+             }
+
+            .sidebar {
+             width: 100%;
+             position: fixed;
+             bottom: 0;
+             left: 0;
+             height: auto;
+             flex-direction: row;
+             align-items: center;
+             justify-content: space-around;
+             border-radius: 0;
+             z-index: 1000;
+             background: linear-gradient(145deg, #4a148c, #8e24aa); /* Keep gradient */
+           }
+           .sidebar:hover{
+             width: 100%; /* No hover effect on small screen */
+           }
+
+             .profile-section {
+                  display: none;  /*Hide */
+             }
+
+             .sidebar .menu {
+                display: flex;
+              flex-direction: row; /* Horizontal menu */
+              flex: 1; /* Take up all available space */
+              padding: 0;
+             }
+
+             .sidebar .menu ul {
+              display: flex;
+              flex-direction: row; /* Horizontal list items */
+              flex: 1;                        /* Distribute items evenly */
+              justify-content: space-around; /* Space items evenly */
+             }
+
+             .sidebar .menu ul li {
+              margin: 0;  /* Remove margins */
+              padding: 10px 0; /* Add some vertical padding */
+             }
+
+             .sidebar .menu ul li a{
+              padding: 10px;
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset to default */
+                 font-size: inherit;
+                 font-weight: normal;
+             }
+              .menu ul li a.active {
+                 font-weight: normal; /*remove the bolder on active when it collapse */
+             }
+
+             .logout {
+                 display: none; /* Hide the logout button */
+             }
+             .menu ul li:hover {
+                 transform: none; /* Remove transform */
+             }
+             .menu ul li a:hover::before{
+                 width: 0;  /* Disable ripple */
+                 height: 0;
+             }
+              .content-area{
+                     padding-bottom: 56px;  /*remove if any issue created*/
+                 }
+         }
+          /* Course Selection Styles */
+        .course-selector {
+            margin: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Align to the start */
+            gap: 10px; /* Space between label and select */
+        }
+
+        .course-selector label {
+            font-weight: bold;
+            color: #333;
+             margin-bottom: 0; /* Remove bottom margin */
+        }
+
+        .course-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+             background-color: white; /* Match the table background */
+            color: #495057;
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="sidebar">
+        <div class="profile-section">
+            <img src="https://via.placeholder.com/50" alt="Profile" id="sidebarProfileImage"/>
+            <div class="profile-info">
+                <div class="name" id="currentUserName">Loading...</div>
+                <div class="email" id="currentUserEmail">Loading...</div>
+            </div>
+        </div>
+        <div class="menu">
+            <h3>Menu</h3>
+            <ul>
+                <li><a href="home.html"><i class="fas fa-comments"></i><span>Chat</span></a></li><br>
+                <li><a href="notes.html"><i class="fas fa-book"></i><span>Notes</span></a></li><br>
+                <li><a href="previousPapers.html"><i class="fas fa-file-alt"></i><span>Previous Papers</span></a></li><br>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i><span>Events</span></a></li><br>
+                <li><a href="internships.html"><i class="fas fa-briefcase"></i><span>Jobs</span></a></li><br> <li><a href="leaderboard.html" class="active"><i class="fas fa-trophy"></i><span>Leaderboard</span></a></li><br>
+                <li><a href="editProfile.html"><i class="fas fa-user-edit"></i><span>Edit Profile</span></a></li><br>
+            </ul>
+        </div>
+        <div class="logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h2>Leaderboard</h2>
+
+        <div class="course-selector">
+            <label for="courseSelect">Select Course:</label>
+            <select id="courseSelect" onchange="loadLeaderboard()">
+                <option value="">All Courses</option>
+                <option value="B.Sc">B.Sc</option>
+                <option value="BCA">BCA</option>
+                <option value="B.Tech">B.Tech</option>
+            </select>
+        </div>
+
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    async function loadLeaderboard() {
+        const courseSelect = document.getElementById("courseSelect");
+        const selectedCourse = courseSelect.value;
+        let url = '/api/leaderboard'; // Use the API endpoint
+
+        if (selectedCourse) {
+            url += `?course=${selectedCourse}`;
+        }
+
+        try {
+            const response = await fetch(url); // Use fetch API
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json(); // Parse JSON response
+
+            const leaderboardBody = document.getElementById("leaderboardBody");
+            leaderboardBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(entry => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${entry.rank}</td>
+                    <td>${entry.studentName}</td>
+                    <td>${entry.totalAchievement}</td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error("Error fetching leaderboard:", error);
+            alert("Error fetching data. See console for details.");
+        }
+    }
+
+    // Initial load
+    window.onload = loadLeaderboard;
+
+    //----  Existing script for user data ----
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchAndDisplayUserData();
+       // await loadEvents(); // Remove this line, not related to the leaderboard
+       // document.getElementById('addEventBtn').addEventListener('click', addEvent); // Remove this line
+
+        //Highlight the active menu
+        highlightActiveLink('leaderboard.html'); // Add this line
+    });
+
+    /**
+     * Fetch current user data and update the sidebar
+     */
+    async function fetchAndDisplayUserData() {
+        try {
+            const userData = await fetchCurrentUser();
+
+            // Update name and email in the sidebar
+            document.getElementById('currentUserName').textContent = userData.name || 'No Name';
+            document.getElementById('currentUserEmail').textContent = userData.email || 'No Email';
+
+            // Update profile picture if it exists
+            if (userData.profilePicture) {
+                // Construct the full URL for the profile picture
+                const profilePicUrl = `${window.location.origin}${userData.profilePicture}`;
+                document.getElementById('sidebarProfileImage').src = profilePicUrl;
+            }
+
+        } catch (err) {
+            console.error('User fetch error:', err);
+            window.location.href = '/login.html';
+        }
+    }
+
+    /**
+     * Fetch current user data from the backend
+     */
+    async function fetchCurrentUser() {
+        const res = await fetch('http://localhost:8080/api/students/current', {
+            credentials: 'include'
+        });
+        if (!res.ok) {
+            throw new Error('Not logged in');
+        }
+        return await res.json();
+    }
+    /**
+     * Logout function
+     */
+    function logout() {
+        // Call a logout endpoint if available
+        // For now, just redirect to login page
+        window.location.href = '/login.html';
+    }
+
+    /**
+    * Highlight the active menu link
+    */
+     function highlightActiveLink(currentPage) {
+        document.querySelectorAll('.menu ul li a').forEach(link => {
+           if (link.getAttribute('href') === currentPage) {
+              link.classList.add('active');
+           } else {
+              link.classList.remove('active');
+          }
+       });
+    }
+
+</script>
+</body>
+</html>

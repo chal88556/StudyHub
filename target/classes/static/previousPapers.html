@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>StudyHub Previous Papers</title>
+    <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* --- Base Styles (from Main Style) --- */
+       body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #343a40;
+            overflow-x: hidden;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+        }
+
+        /* --- Sidebar (from Main Style) --- */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(145deg, #4a148c, #8e24aa);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            border-radius: 10px 0 0 10px;
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 300px;
+        }
+
+        .profile-section {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-section:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 2px solid #fff;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            object-fit: cover; /* Ensure images fit nicely */
+        }
+
+        .profile-section img:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-info .name {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .profile-info .email {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* --- Menu (from Main Style) --- */
+      .menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .menu h3 {
+            display: none; /* Hide */
+        }
+
+        .menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li {
+            margin: 2px 0;
+            padding: 0;
+            transition: transform 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #eee;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+            overflow: hidden;
+             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Use main font */
+            font-size: 1rem;  /*Consistent font size*/
+            font-weight: 500;
+        }
+          .menu ul li a span {
+            font-family: 'Dancing Script', cursive; /* Apply cursive to span */
+        }
+
+
+        /* Ripple Effect (from Main Style) */
+        .menu ul li a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+
+        .menu ul li a:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+
+         .menu ul li a i,
+        .menu ul li a span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu ul li i {
+            margin-right: 12px;
+            font-size: 17px;
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Active Menu Item (from Main Style) */
+        .menu ul li a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* --- Logout (from Main Style) --- */
+        .logout {
+            padding: 12px 15px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px;
+            border-radius: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .logout i {
+            margin-right: 8px;
+            font-size: 17px;
+        }
+
+
+       .content-area {
+            flex: 1;
+            background: #f0f4f8;  /* Consistent background */
+            overflow-y: auto;
+            border-radius: 0 10px 10px 0;
+            padding: 15px; /* Add padding */
+        }
+
+        .content-area h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;          /* Consistent with header */
+            border-bottom: 1px solid #e0e0e0; /* Consistent */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Papers List (Adapted from your provided CSS) --- */
+        .papers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive */
+            gap: 15px; /* Consistent gap */
+            padding: 0 15px;
+            padding-bottom: 15px;
+        }
+
+        .paper-card {
+            background: #fff;
+            border-radius: 8px; /* Match main style */
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);  /* Match main style */
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .paper-card h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #5e35b1; /* Consistent primary color */
+            font-size: 18px;
+            font-weight: 600;
+            word-wrap: break-word; /* Prevent overflow */
+        }
+
+        .paper-card p {
+             color: #444;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            word-wrap: break-word;  /*Prevent the overflow*/
+        }
+
+        .paper-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto; /* Push to bottom */
+        }
+
+        .paper-actions a,
+        .paper-actions button {
+            text-decoration: none;
+            color: #fff;
+            background: #5e35b1; /* Consistent button color */
+            border: none;
+            cursor: pointer;
+            padding: 10px 16px; /* Match .chat-input */
+            border-radius: 20px;  /* Match .chat-input */
+            font-size: 14px;    /* Match .chat-input */
+            box-sizing: border-box;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .paper-actions a:hover,
+        .paper-actions button:hover {
+            background: #4527a0; /* Darker shade on hover */
+            transform: scale(1.05);
+        }
+
+        /* Specific button styles (if needed, but try to keep consistent) */
+        /* .download-btn {} */
+        /* .preview-btn {} */
+
+
+        /* --- PDF Preview Modal (Consistent) --- */
+        .modal-lg {
+            max-width: 80% !important; /* Control modal size */
+        }
+
+        .modal-body {
+            padding: 0; /* Remove padding */
+        }
+
+        iframe#pdfFrame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+        }
+
+
+        /* --- Responsive (Adapted) --- */
+        @media (max-width: 992px) {
+           .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+
+            .sidebar:hover {
+                width: 260px;
+            }
+
+            .sidebar:hover .profile-info,
+            .sidebar:hover .menu h3,
+            .sidebar:hover .menu ul li span {
+                display: flex;
+            }
+
+            .profile-section {
+              padding: 10px;
+              justify-content: center;
+            }
+            .profile-section img {
+              width: 35px;
+              height: 35px;
+              margin-right: 0;
+            }
+
+            .profile-info {
+              display: none;
+            }
+
+            .menu h3 {
+                display: none;
+            }
+
+            .menu ul li {
+              margin: 5px 0;
+              padding: 8px;
+              justify-content: center;
+            }
+
+            .menu ul li i {
+              margin-right: 0;
+            }
+
+            .menu ul li span {
+               display: none;
+            }
+             /* Remove hover effects when collapsed */
+            .menu ul li:hover {
+              transform: none; /* Remove transform */
+            }
+            .menu ul li a:hover::before{
+              width: 0;  /* Disable ripple */
+              height: 0;
+            }
+             /* Reset font styles when collapsed */
+            .menu ul li a {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+                font-size: inherit; /* Reset size */
+                font-weight: normal; /* Reset weight */
+            }
+             .menu ul li a.active {
+              font-weight: normal; /*remove the bolder on active when it collapse */
+            }
+
+            .logout {
+              padding: 8px;
+              margin: 10px 0;
+              justify-content: center;
+            }
+
+            .logout i {
+              margin-right: 0;
+            }
+             .content-area{
+                    padding: 15px; /*Consistent padding*/
+              }
+
+        }
+
+        @media (max-width: 576px) {
+            .chat-container {
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                height: 100vh;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                height: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                border-radius: 0;
+                z-index: 1000;
+                background: linear-gradient(145deg, #4a148c, #8e24aa);
+            }
+
+            .sidebar:hover {
+                width: 100%;  /* No hover on small screens */
+            }
+
+            .profile-section {
+                display: none; /* Hide */
+            }
+
+            .sidebar .menu {
+               display: flex;
+              flex-direction: row; /* Horizontal menu */
+              flex: 1; /* Take up all available space */
+              padding: 0;
+            }
+
+            .sidebar .menu ul {
+              display: flex;
+              flex-direction: row; /* Horizontal list items */
+              flex: 1;            /* Distribute items evenly */
+              justify-content: space-around; /* Space items evenly */
+            }
+
+            .sidebar .menu ul li {
+              margin: 0;  /* Remove margins */
+              padding: 10px 0; /* Add some vertical padding */
+            }
+
+            .sidebar .menu ul li a{
+              padding: 10px;
+               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset to default */
+              font-size: inherit;
+              font-weight: normal;
+            }
+              .menu ul li a.active {
+                font-weight: normal; /*remove the bolder on active when it collapse */
+              }
+
+            .logout {
+              display: none; /* Hide the logout button */
+            }
+            .menu ul li:hover {
+              transform: none; /* Remove transform */
+            }
+            .menu ul li a:hover::before{
+              width: 0;  /* Disable ripple */
+              height: 0;
+            }
+               .content-area{
+                    padding-bottom: 56px;  /*remove if any issue created*/
+                }
+            .papers-list {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Smaller cards */
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="chat-container">
+  <div class="sidebar">
+    <div class="profile-section">
+        <img src="https://via.placeholder.com/50" alt="Profile" id="sidebarProfileImage"/>
+        <div class="profile-info">
+            <div class="name" id="currentUserName">Loading...</div>
+            <div class="email" id="currentUserEmail">Loading...</div>
+        </div>
+    </div>
+    <div class="menu">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="home.html"><i class="fas fa-comments"></i><span>Chat</span></a></li><br>
+            <li><a href="notes.html"><i class="fas fa-book"></i><span>Notes</span></a></li><br>
+            <li><a href="previousPapers.html" class="active"><i class="fas fa-file-alt"></i><span> Previous Papers</span></a></li><br>
+            <li><a href="events.html"><i class="fas fa-calendar-alt"></i><span>Events</span></a></li><br>
+            <li><a href="internships.html"><i class="fas fa-briefcase"></i><span>Jobs</span></a></li><br>
+            <li><a href="leaderboard.html"><i class="fas fa-trophy"></i><span>Leaderboard</span></a></li><br>
+            <li><a href="editProfile.html"><i class="fas fa-user-edit"></i><span>Edit Profile</span></a></li><br>
+        </ul>
+    </div>
+    <div class="logout" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </div>
+</div>
+
+<div class="content-area">
+    <h2 id="papersHeader">StudyHub Previous Papers</h2>
+    <div class="papers-list" id="papersList">
+        </div>
+</div>
+</div>
+
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="previewModalLabel">PDF Preview</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <iframe src="" id="pdfFrame"></iframe>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let currentCourseDirectory = "";
+let currentCourseName = "StudyHub";
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const userData = await fetchCurrentUser();
+        document.getElementById('currentUserName').textContent = userData.name || 'No Name';
+        document.getElementById('currentUserEmail').textContent = userData.email || 'No Email';
+
+        // If profilePicture exists, load it
+        if (userData.profilePicture) {
+            document.getElementById('sidebarProfileImage').src = `${window.location.origin}${userData.profilePicture}`;
+        }
+
+        currentCourseName = userData.course || "StudyHub"; // Default
+        currentCourseDirectory = mapCourseToDir(userData.course);
+
+
+        document.getElementById('papersHeader').textContent = `${currentCourseName} Previous Papers`;
+        setActiveMenuItem('previousPapers.html');
+        loadPapers();
+
+
+    } catch (err) {
+        console.error(err);
+        window.location.href = '/login.html'; // Redirect if not logged in
+    }
+});
+
+function mapCourseToDir(courseName) {
+     if (!courseName) return "general"; // Default directory
+     return courseName.replace(/[^a-zA-Z0-9]/g, ""); // Sanitize
+}
+
+async function fetchCurrentUser() {
+    const res = await fetch('http://localhost:8080/api/students/current', { credentials: 'include' });
+    if (!res.ok) {
+      throw new Error('Not logged in');
+    }
+    return await res.json();
+  }
+
+async function loadPapers() {
+    try {
+        const res = await fetch(`http://localhost:8080/api/files/papers?course=${currentCourseDirectory}`, { credentials: 'include' });
+        if (!res.ok) {
+            // Handle HTTP errors (e.g., 404, 500)
+            document.getElementById('papersList').innerHTML = '<p>No papers available.</p>';
+            return; // Exit if no papers or error.
+        }
+        const files = await res.json();
+        renderPapers(files);
+
+
+    } catch (error) {
+        console.error('Error loading papers:', error);
+        document.getElementById('papersList').innerHTML = '<p>Error loading papers. Please try again later.</p>';
+    }
+}
+
+
+
+function renderPapers(files) {
+    const papersList = document.getElementById('papersList');
+    papersList.innerHTML = ''; // Clear existing
+
+    if (!files || files.length === 0) {
+        papersList.innerHTML = '<p>No papers available for your course.</p>';
+        return;
+    }
+
+    files.forEach(file => {
+        const paperCard = document.createElement('div');
+        paperCard.classList.add('paper-card');
+
+        const h4 = document.createElement('h4');
+        h4.textContent = file.title || removeExtension(file.filename); // Use title, fallback to filename
+        paperCard.appendChild(h4);
+
+        const subjP = document.createElement('p'); //Added subject
+        subjP.innerHTML = `<i class="fas fa-book-open me-2"></i><strong>Subject:</strong> ${removeExtension(file.filename)}`;
+        paperCard.appendChild(subjP);
+
+
+        const actions = document.createElement('div');
+        actions.classList.add('paper-actions');
+
+        // Preview Button
+        const previewBtn = document.createElement('button'); // Use a button
+        previewBtn.classList.add('preview-btn');
+        previewBtn.innerHTML = '<i class="fas fa-eye"></i> Preview';
+        previewBtn.addEventListener('click', () => {
+            const pdfUrl = `/uploads/Paper/${currentCourseDirectory}/${file.filename}`;
+            document.getElementById('pdfFrame').src = pdfUrl;
+            document.getElementById('previewModalLabel').textContent = file.title || removeExtension(file.filename);; // Set modal title
+            const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+            previewModal.show();
+        });
+        actions.appendChild(previewBtn);
+
+        // Download Link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = `/uploads/Paper/${currentCourseDirectory}/${file.filename}`;
+        downloadLink.download = file.filename; // Set filename for download
+         downloadLink.classList.add('download-btn');
+        downloadLink.innerHTML = '<i class="fas fa-download"></i> Download'; //Added icon
+        actions.appendChild(downloadLink);
+
+        paperCard.appendChild(actions);
+        papersList.appendChild(paperCard);
+    });
+}
+
+function removeExtension(filename) {
+    return filename.replace(/\.[^/.]+$/, "");
+}
+
+function logout() {
+    //  fetch('/api/logout', { method: 'POST' }); // Call a logout endpoint.
+    window.location.href = '/login.html'; // Redirect
+}
+
+function setActiveMenuItem(currentPage) {
+  const menuLinks = document.querySelectorAll('.sidebar .menu ul li a');
+  menuLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
+</script>
+</body>
+</html>
