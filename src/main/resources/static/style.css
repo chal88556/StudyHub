@@ -1,0 +1,312 @@
+/* common-styles.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: #f8f9fa;
+    color: #343a40;
+    overflow-x: hidden;
+}
+
+/* --- Sidebar Styles (Menu) --- */
+
+.sidebar {
+    width: 250px;
+    background: linear-gradient(145deg, #4a148c, #8e24aa);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    border-radius: 10px 0 0 10px;
+    overflow: hidden;
+    /* ADDED THIS:  Essential for consistent height */
+    height: 100vh;
+}
+
+.sidebar:hover {
+    width: 300px;
+}
+
+.profile-section {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    transition: background 0.3s ease;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-section:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 12px;
+    border: 2px solid #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-section img:hover {
+    transform: scale(1.05);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-info .name {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.profile-info .email {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+.menu h3{
+    display: none;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 2px 0;
+    padding: 0;
+    transition: transform 0.3s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.menu ul li:hover {
+    transform: translateX(5px);
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #eee;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.menu ul li a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: 0;
+}
+
+.menu ul li a:hover::before {
+    width: 250px;
+    height: 250px;
+}
+
+.menu ul li a i,
+.menu ul li a span {
+    position: relative;
+    z-index: 1;
+}
+
+.menu ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.menu ul li i {
+    margin-right: 12px;
+    font-size: 17px;
+    width: 22px;
+    text-align: center;
+}
+
+.menu ul li a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.logout {
+    padding: 12px 15px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px;
+    border-radius: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.logout i {
+    margin-right: 8px;
+    font-size: 17px;
+}
+/* --- Responsive Styles (Keep these) --- */
+/* Medium Devices */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  .sidebar:hover {
+    width: 260px;
+  }
+.sidebar:hover .profile-info,
+  .sidebar:hover .menu h3,
+  .sidebar:hover .menu ul li span{
+    display: flex;
+  }
+  .profile-section {
+    padding: 10px;
+    justify-content: center;
+  }
+  .profile-section img {
+    width: 35px;
+    height: 35px;
+    margin-right: 0;
+  }
+  .profile-info {
+    display: none;
+  }
+  .menu h3 {
+    display: none;
+  }
+  .menu ul li {
+    justify-content: center;
+    margin: 5px 0;
+    padding: 8px;  /* Add padding back for icon-only view */
+  }
+
+    .menu ul li i {
+        margin-right: 0;
+    }
+
+    .menu ul li span {
+        display: none; /* Hide text by default */
+    }
+     /* Remove hover effects when sidebar is collapsed */
+    .menu ul li:hover {
+        transform: none; /* Remove transform */
+    }
+    .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+    }
+     /* Reset font styles when collapsed */
+    .menu ul li a {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+        font-size: inherit; /* Reset size */
+        font-weight: normal; /* Reset weight */
+    }
+    .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+  .logout {
+    padding: 8px;
+    margin: 10px 0;
+    justify-content: center;
+  }
+  .logout i {
+    margin-right: 0;
+  }
+}
+
+/* Small Devices */
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        border-radius: 0;
+        z-index: 1000;
+        background: linear-gradient(145deg, #4a148c, #8e24aa); /* Keep gradient */
+      }
+    .sidebar:hover{
+        width: 100%;
+    }
+    .profile-section {
+        display: none;
+    }
+    .sidebar .menu {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        padding: 0;
+    }
+    .sidebar .menu ul {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-around;
+    }
+    .sidebar .menu ul li {
+        margin: 0;
+        padding: 10px 0;
+    }
+    .sidebar .menu ul li a{
+        padding: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: inherit;
+        font-weight: normal;
+    }
+    .menu ul li a.active {
+      font-weight: normal; /*remove the bolder on active when it collapse */
+    }
+    .logout {
+        display: none;
+    }
+    .menu ul li:hover {
+    transform: none; /* Remove transform */
+    }
+    .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+    }
+}

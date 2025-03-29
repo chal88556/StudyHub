@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyHub Edit Profile</title>
+  <!-- Add favicon -->
+  <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <!-- Bootstrap 5 CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f8f9fa;
+      color: #343a40;
+      overflow: hidden;
+    }
+    
+    /* Main Container */
+    .chat-container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 1rem;
+    }
+    
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(145deg, #4a148c, #8e24aa);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s ease;
+      box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      border-radius: 10px 0 0 10px;
+      overflow: hidden;
+    }
+    
+    .sidebar:hover {
+      width: 300px;
+    }
+    
+    .profile-section {
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      transition: background 0.3s ease;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .profile-section:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .profile-section img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      margin-right: 12px;
+      border: 2px solid #fff;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .profile-section img:hover {
+      transform: scale(1.05);
+    }
+    
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .profile-info .name {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    
+    .profile-info .email {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+    
+    /* Menu Section */
+    .menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    
+    /* Menu Heading (Hidden) */
+    .menu h3 {
+        display: none;
+    }
+    
+    /* Menu List */
+    .menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .menu ul li {
+      margin: 2px 0;
+      padding: 0;
+      transition: transform 0.3s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    
+    
+    .menu ul li:hover {
+        transform: translateX(5px);
+    }
+    
+    /* Menu Links */
+    .menu ul li a {
+      text-decoration: none;
+      color: #eee;        /* Light gray text - better contrast */
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Dancing Script', cursive; /* Cursive font */
+      font-size: 1.1rem; /* Slightly larger font size */
+      font-weight: 500;   /* Slightly bolder */
+    
+    }
+    
+    /* Ripple Effect */
+    .menu ul li a::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.4s ease, height 0.4s ease;
+        z-index: 0;
+    }
+    
+    .menu ul li a:hover::before {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .menu ul li a i,
+    .menu ul li a span {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .menu ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+       /* No color change on hover, keep light gray*/
+    }
+    
+    .menu ul li i {
+      margin-right: 12px;
+      font-size: 17px;
+      width: 22px;
+      text-align: center;
+    }
+    
+    /* Active Menu Item */
+    .menu ul li a.active {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translateX(5px);
+        border-radius: 8px;
+        color: #fff; /* White text for active link */
+        font-weight: 600; /* Bolder font for active link */
+    }
+    
+    
+    /* --- LOGOUT --- */
+    .logout {
+      padding: 12px 15px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px;
+      border-radius: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logout:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .logout i {
+      margin-right: 8px;
+      font-size: 17px;
+    }
+
+    /* CONTENT AREA */
+    .content-area {
+      flex: 1;
+      padding: 30px 40px;
+      background: #fafafa;
+      overflow-y: auto;
+    }
+    .content-area h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* Edit Profile Form */
+    .edit-profile-form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .edit-profile-form .form-group {
+      margin-bottom: 20px;
+    }
+    .edit-profile-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    .edit-profile-form input, 
+    .edit-profile-form textarea {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+    .edit-profile-form input:focus, 
+    .edit-profile-form textarea:focus {
+      border-color: #512da8;
+      outline: none;
+    }
+    .edit-profile-form button {
+      background: #512da8;
+      color: #fff;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .edit-profile-form button:hover {
+      background: #3f51b5;
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 70px;
+        overflow: hidden;
+      }
+    
+      .sidebar:hover {
+        width: 260px;
+      }
+    
+      .sidebar:hover .profile-info,
+      .sidebar:hover .menu h3,
+      .sidebar:hover .menu ul li span {
+        display: flex;
+      }
+    
+      .profile-section {
+        padding: 10px;
+        justify-content: center;
+      }
+    
+      .profile-section img {
+        width: 35px;
+        height: 35px;
+        margin-right: 0;
+      }
+    
+      .profile-info {
+        display: none;
+      }
+    
+      .menu h3 {
+        display: none; /* Hide by default */
+      }
+    
+      .menu ul li {
+        margin: 5px 0;
+        padding: 8px;  /* Add padding back for icon-only view */
+        justify-content: center;
+      }
+    
+      .menu ul li i {
+        margin-right: 0;
+      }
+    
+      .menu ul li span {
+        display: none; /* Hide text by default */
+      }
+        /* Remove hover effects when sidebar is collapsed */
+      .menu ul li:hover {
+        transform: none; /* Remove transform */
+      }
+      .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+      }
+       /* Reset font styles when collapsed */
+       .menu ul li a {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset font */
+        font-size: inherit; /* Reset size */
+        font-weight: normal; /* Reset weight */
+    }
+
+    
+        .menu ul li a.active {
+          font-weight: normal; /*remove the bolder on active when it collapse */
+        }
+    
+    
+      .logout {
+        padding: 8px;
+        margin: 10px 0;
+        justify-content: center;
+      }
+    
+      .logout i {
+        margin-right: 0;
+      }
+    
+      .chat-header .chat-title {
+        display: none;
+      }
+    
+      .chat-header img {
+        margin-right: 8px;
+      }
+    
+      .message {
+        max-width: 80%;
+      }
+    
+      .chat-tools button {
+        margin-right: 2px;
+      }
+    
+      .chat-input {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    
+      .send-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+    
+      .emoji-picker {
+        width: 220px;
+        left: 2px;
+        bottom: 48px;
+      }
+    
+      .chat-messages {
+          margin-bottom: 60px; /* Reduce bottom margin on tablet */
+      }
+    
+      .message-input-section{
+          margin-bottom: 1rem;
+      }
+    }
+    
+    /* Small Devices (Phones) */
+    @media (max-width: 576px) {
+      .chat-container {
+        margin: 0; /* Remove margin completely on small screens*/
+        border-radius: 0;
+        box-shadow: none;
+        height: 100vh; /* Ensure full height */
+      }
+    
+      .sidebar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        border-radius: 0;
+        z-index: 1000;
+        background: linear-gradient(145deg, #4a148c, #8e24aa); /* Keep gradient */
+      }
+      .sidebar:hover{
+        width: 100%; /* No hover effect on small screen */
+      }
+    
+      .profile-section {
+        display: none;  /* Hide the profile section */
+      }
+    
+      .sidebar .menu {
+        display: flex;
+        flex-direction: row; /* Horizontal menu */
+        flex: 1; /* Take up all available space */
+        padding: 0;
+      }
+    
+      .sidebar .menu ul {
+        display: flex;
+        flex-direction: row; /* Horizontal list items */
+        flex: 1;            /* Distribute items evenly */
+        justify-content: space-around; /* Space items evenly */
+      }
+    
+      .sidebar .menu ul li {
+        margin: 0;  /* Remove margins */
+        padding: 10px 0; /* Add some vertical padding */
+      }
+    
+      .sidebar .menu ul li a{
+        padding: 10px;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reset to default */
+        font-size: inherit;
+        font-weight: normal;
+      }
+        .menu ul li a.active {
+          font-weight: normal; /*remove the bolder on active when it collapse */
+        }
+    
+      .logout {
+        display: none; /* Hide the logout button */
+      }
+      .menu ul li:hover {
+        transform: none; /* Remove transform */
+      }
+      .menu ul li a:hover::before{
+        width: 0;  /* Disable ripple */
+        height: 0;
+      }
+      .chat-section {
+        border-radius: 0;
+        padding-bottom: 56px;  /* Adjust for the bottom navbar */
+      }
+      .message-input-section{
+          margin-bottom: 0; /*remove the margin*/
+      }
+    
+      .chat-messages{
+          margin-bottom: 110px;
+      }
+    
+      .message {
+        max-width: 90%;
+      }
+    
+      .emoji-picker {
+        bottom: auto; /* Reset bottom positioning */
+        top: 10px;
+        left: 5px;
+        right: 5px;
+        width: auto;
+      }}
+    .menu ul li a.active {
+      background: rgba(255,255,255,0.3);
+      transform: translateX(10px);
+      border-radius: 10px;
+    }
+
+    /* Image Preview Styles */
+    .image-preview {
+      width: 100px;
+      height: 100px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+      <div class="sidebar">
+          <div class="profile-section">
+              <img src="https://via.placeholder.com/50" alt="Profile" id="sidebarProfileImage"/>
+              <div class="profile-info">
+                  <div class="name" id="currentUserName">Loading...</div>
+                  <div class="email" id="currentUserEmail">Loading...</div>
+              </div>
+          </div>
+          <div class="menu">
+              <h3>Menu</h3>
+              <ul>
+                  <li><a href="home.html"><i class="fas fa-comments"></i><span>Chat</span></a></li><br>
+                  <li><a href="notes.html"><i class="fas fa-book"></i><span>Notes</span></a></li><br>
+                  <li><a href="previousPapers.html"><i class="fas fa-file-alt"></i><span>Previous Papers</span></a></li><br>
+                  <li><a href="events.html"><i class="fas fa-calendar-alt"></i><span>Events</span></a></li><br>
+                  <li><a href="internships.html"><i class="fas fa-briefcase"></i><span>Internship</span></a></li><br>
+                  <li><a href="leaderboard.html"><i class="fas fa-trophy"></i><span>Leaderboard</span></a></li><br>
+                  <li><a href="editProfile.html" class="active"><i class="fas fa-user-edit"></i><span>Edit Profile</span></a></li><br>
+              </ul>
+          </div>
+          <div class="logout" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+          </div>
+      </div>
+  
+      <div class="content-area">
+          <h2>Edit Profile</h2>
+          <div class="edit-profile-form">
+              <form id="editProfileForm" enctype="multipart/form-data">
+                  <div class="form-group text-center">
+                      <img src="https://via.placeholder.com/100" alt="Profile Preview" id="imagePreview" class="image-preview"/>
+                  </div>
+                  <div class="form-group">
+                      <label for="fullName">Full Name</label>
+                      <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required/>
+                  </div>
+                  <div class="form-group">
+                      <label for="email">Email Address</label>
+                      <input type="email" id="email" name="email" placeholder="Enter your email address" required/>
+                  </div>
+                  <div class="form-group">
+                      <label for="bio">Bio</label>
+                      <textarea id="bio" name="bio" rows="4" placeholder="Tell us something about yourself"></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="profilePicture">Profile Picture</label>
+                      <input type="file" id="profilePicture" name="profilePicture" accept="image/png, image/jpeg, image/jpg"/>
+                  </div>
+                  <button type="submit">Save Changes</button>
+              </form>
+          </div>
+      </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+          const userData = await fetchCurrentUser();
+  
+          // Update name and email in the sidebar
+          document.getElementById('currentUserName').textContent = userData.name || 'No Name';
+          document.getElementById('currentUserEmail').textContent = userData.email || 'No Email';
+  
+          // Update profile picture if it exists
+          if (userData.profilePicture) {
+              // Construct the full URL for the profile picture
+              const profilePicUrl = `${window.location.origin}${userData.profilePicture}`;
+              document.getElementById('sidebarProfileImage').src = profilePicUrl;
+              document.getElementById('imagePreview').src = profilePicUrl;
+              document.getElementById('imagePreview').style.display = 'block';
+          }
+  
+          // Pre-fill form fields
+          document.getElementById('fullName').value = userData.name || '';
+          document.getElementById('email').value = userData.email || '';
+          document.getElementById('bio').value = userData.bio || '';
+  
+          setActiveMenuItem('editProfile.html');
+      } catch (err) {
+          console.error(err);
+          //window.location.href = '/login.html';
+      }
+  });
+  
+  // Fetch current user data
+  async function fetchCurrentUser() {
+      const res = await fetch('http://localhost:8080/api/students/current', { credentials: 'include' });
+      if (!res.ok) {
+          throw new Error('Not logged in');
+      }
+      return await res.json();
+  }
+  
+  // Handle image preview
+  document.getElementById('profilePicture').addEventListener('change', function() {
+      const file = this.files[0];
+      const preview = document.getElementById('imagePreview');
+  
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+          }
+          reader.readAsDataURL(file);
+      } else {
+          preview.src = 'https://via.placeholder.com/100';
+          preview.style.display = 'none';
+      }
+  });
+  
+  // Submit updated profile
+  document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+  
+      const form = e.target;
+      const formData = new FormData(form);
+  
+      // Get the values of fullName and bio
+      const fullName = document.getElementById('fullName').value;
+      const bio = document.getElementById('bio').value;
+  
+      
+      
+  
+      try {
+          // Backend endpoint to handle profile update with image upload
+          const response = await fetch('http://localhost:8080/api/students/updateProfile', {
+              method: 'PUT',
+              body: formData,
+              credentials: 'include'
+          });
+  
+          if (response.ok) {
+              alert('Profile updated successfully!');
+              // Reload the page to reflect changes
+              window.location.reload();
+          } else {
+              const errData = await response.json();
+              alert('Could not update profile: ' + (errData.message || 'Unknown error'));
+          }
+      } catch (error) {
+          console.error('Profile update error:', error);
+          alert('An error occurred. Please try again later.');
+      }
+  });
+  
+  function logout() {
+      window.location.href = '/login.html';
+  }
+  
+  function setActiveMenuItem(currentPage) {
+      const menuLinks = document.querySelectorAll('.sidebar .menu ul li a');
+      menuLinks.forEach(link => {
+          if (link.getAttribute('href') === currentPage) {
+              link.classList.add('active');
+          } else {
+              link.classList.remove('active');
+          }
+      });
+  }
+  </script>
+  </body>
+</html>

@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Studyhub - Connect & Learn</title>
+    <link rel="icon" type="image/png" href="/uploads/Logo/logo.png">
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@700&display=swap"
+            rel="stylesheet"
+    />
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script
+            type="module"
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+            nomodule
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <style>
+        :root {
+            /* Updated Color Scheme */
+            --color-primary: #4A6572; /* Muted Teal - A calm and professional color */
+            --color-primary-dark: #344955; /* Darker Teal - For hover states and accents */
+            --color-accent: #F9AA33; /* Warm Gold - Adds a pop of brightness and energy */
+            --color-bg: #F2F2F2; /* Light Gray - Soft background color */
+            --color-text: #333333; /* Dark Gray - For better readability */
+            --color-white: #FFFFFF; /* Pure White - For clean highlights */
+            --color-footer: #232F3E; /* Dark Slate - Strong and stable footer color */
+            --color-gray: #666666; /* Neutral Gray - For secondary text and elements */
+
+            /* Dark Theme Colors (Optional, but recommended for modern look) */
+            --color-bg-dark: #181818; /* Very Dark Gray - For a sleek dark mode background */
+            --color-text-dark: #EEEEEE; /* Light Gray - For text in dark mode */
+            --color-card-bg-dark: #282828; /* Slightly Lighter Dark Gray - For cards in dark mode */
+
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --color-bg: var(--color-bg-dark);
+            --color-text: var(--color-text-dark);
+            --color-footer: #0f0f0f;
+            --color-primary: #5A8596; /* Adjusted for dark mode visibility */
+            --color-primary-dark: #4A6572; /* Adjusted for dark mode visibility */
+            --color-white: #282828;
+            --color-gray: #BBBBBB; /* Lighter gray for dark mode */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg);
+            overflow-x: hidden;
+            box-sizing: border-box;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-text);
+            transition: color var(--transition-speed);
+        }
+
+        a:hover {
+            color: var(--color-accent);
+        }
+
+        /* Header */
+        header {
+            background: var(--color-primary);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 60px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header.scrolled {
+            background: var(--color-primary-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header .logo h1 {
+            font-size: 24px;
+            margin: 0;
+            color: var(--color-white);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .dark-mode-toggle,
+        .nav-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--color-white);
+            margin-left: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: var(--color-white);
+            font-weight: bold;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        nav ul li a:hover {
+            color: var(--color-accent);
+        }
+
+        /* Responsive Navigation */
+        .nav-toggle {
+            display: none;
+        }
+
+        @media(max-width: 1000px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background-color: var(--color-primary);
+                width: 100%;
+                display: none;
+                padding: 1rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                animation: slideDown var(--transition-speed) ease;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+
+        /* Hero Section */
+        #hero {
+            position: relative;
+            height: 100vh;
+            /* Using a subtle gradient background */
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        #hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* Overlay for text visibility */
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            padding: 0 1rem;
+            /* Text shadow for better readability */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content .cta-btn {
+            background: var(--color-accent);
+            color: var(--color-white);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: background var(--transition-speed), transform var(--transition-speed);
+            /* Box shadow for depth */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content .cta-btn:hover {
+            background: var(--color-primary-dark);
+            transform: scale(1.05);
+        }
+
+        @media(max-width:768px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .hero-content .cta-btn {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
+            }
+        }
+
+        /* Section Titles */
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: var(--color-primary-dark);
+        }
+
+        /* Features Section */
+        #features {
+            background: var(--color-white);
+            padding: 4rem 2rem;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: var(--color-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background-color: var(--color-card-bg-dark);
+        }
+
+     .feature-card img {
+            width: 100%;
+            height: 200px; /* Increased height for a more modern look */
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease; /* Add a transition effect */
+        }
+
+        /* Add a hover effect to scale up the image slightly */
+        .feature-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .feature-card-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .feature-card-content h3 {
+            margin-bottom: 1rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .feature-card-content p {
+            color: var(--color-gray);
+            line-height: 1.6;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* How It Works Section */
+        #how-it-works {
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step {
+            background-color: var(--color-white);
+            color: var(--color-text);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            opacity: 0;
+            /* Fade-in animation */
+            transform: translateY(20px);
+            /* Box shadow for depth */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .step {
+            background-color: var(--color-card-bg-dark);
+            color: var(--color-text-dark);
+        }
+
+        .step:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .step ion-icon {
+            font-size: 3rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            /* Adding a subtle transition for the icon color */
+            transition: color var(--transition-speed);
+        }
+
+        .step:hover ion-icon {
+            color: var(--color-primary-dark);
+        }
+
+        .step h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Resources Section */
+        #resources {
+            background: var(--color-bg);
+            padding: 4rem 2rem;
+        }
+
+        .resources-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .resource-card {
+            background-color: var(--color-white);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: perspective(1000px) rotateX(0deg);
+            transform-origin: center;
+        }
+
+        [data-theme="dark"] .resource-card {
+            background-color: var(--color-card-bg-dark);
+        }
+
+        .resource-card:hover {
+            transform: perspective(1000px) rotateX(5deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-card h3 {
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        #testimonials h2 {
+            color: var(--color-white);
+        }
+
+        .testimonials-container {
+            max-width: 800px;
+            margin: 2rem auto 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial {
+            min-width: 100%;
+            transition: transform var(--transition-speed);
+            box-sizing: border-box;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateX(100%);
+            /* Adding background color for better readability */
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .testimonial.active {
+            opacity: 1;
+            transform: translateX(0%);
+        }
+
+        .testimonial p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .testimonial .author {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .testimonial-nav {
+            margin-top: 2rem;
+        }
+
+        .testimonial-nav button {
+            background: var(--color-white);
+            color: var(--color-primary-dark);
+            border: none;
+            margin: 0 5px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background var(--transition-speed);
+        }
+
+        .testimonial-nav button:hover {
+            background: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        /* Newsletter Section */
+        #newsletter {
+            background: var(--color-primary-dark);
+            color: var(--color-white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        #newsletter h2 {
+            color: var(--color-white);
+        }
+
+        .newsletter-form {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .newsletter-form input {
+        flex: 1;
+        padding: 1rem;
+        border-radius: 50px;
+        border: 1px solid var(--color-gray);
+        font-size: 1rem;
+        /* Slight text shadow for better visibility on dark background */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+     .cta-btn,
+    .newsletter-form button,
+    .testimonial-nav button {
+        /* MagicUI Inspired Button */
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 25px; /* Rounded corners */
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        background-color: var(--color-accent);
+        color: var(--color-white);
+        text-transform: uppercase; /* Uppercase text for emphasis */
+        letter-spacing: 0.05em; /* Slight letter spacing for readability */
+    }
+
+    .cta-btn:hover,
+    .newsletter-form button:hover {
+        background-color: var(--color-primary-dark);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increased shadow on hover */
+        transform: translateY(-2px); /* Slight lift on hover */
+    }
+
+    .testimonial-nav button {
+        background-color: var(--color-white);
+        color: var(--color-primary);
+        border: 2px solid var(--color-primary); /* Border for outline style */
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .testimonial-nav button:hover {
+        background-color: var(--color-accent);
+        color: var(--color-white);
+        border-color: transparent;
+    }
+
+    /* --- Container Styles --- */
+    .features-container,
+    .steps-container,
+    .resources-container {
+        /* Applying a subtle "glassmorphism" effect */
+        background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+        backdrop-filter: blur(10px); /* Blur effect */
+        -webkit-backdrop-filter: blur(10px); /* For Safari */
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .features-container,
+    [data-theme="dark"] .steps-container,
+    [data-theme="dark"] .resources-container {
+        background: rgba(0, 0, 0, 0.2); /* Semi-transparent dark */
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .feature-card,
+    .step,
+    .resource-card {
+        /* Removed background color from individual cards to let the container background show through */
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        box-shadow: none; /* Remove default box-shadow */
+    }
+
+    /* --- Icon Styles --- */
+    .feature-card i, /* For Font Awesome icons in feature cards */
+    .step ion-icon, /* For Ionicons in steps */
+    .footer-social ion-icon { /* For Ionicons in footer */
+        font-size: 3rem; /* Make icons larger */
+        color: var(--color-primary);
+        margin-bottom: 1rem;
+        transition: color var(--transition-speed);
+    }
+
+    .feature-card:hover i,
+    .step:hover ion-icon {
+        color: var(--color-accent); /* Change color on hover */
+    }
+
+    .footer-social a:hover ion-icon {
+        color: var(--color-accent);
+    }
+
+    /* --- Additional Refinements --- */
+    /* Make feature card images more responsive */
+    .feature-card img {
+        width: 100%;
+        height: auto; /* Maintain aspect ratio */
+        max-height: 200px; /* Prevent images from being too tall */
+        object-fit: cover;
+        display: block;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    /* Improve spacing in testimonials */
+    .testimonial {
+        padding: 2rem;
+    }
+
+    .testimonial p {
+        margin-bottom: 1rem; /* Space between quote and author */
+    }
+
+    /* Adjust dark mode toggle for better visibility */
+    .dark-mode-toggle {
+        padding: 0.5rem; /* Add padding */
+    }
+
+    /* Footer */
+    footer {
+        background-color: var(--color-footer);
+        color: var(--color-white);
+        padding: 2rem 1rem;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .footer-links,
+    .footer-social,
+    .footer-contact {
+        margin: 1rem 0;
+    }
+
+    .footer-links a {
+        color: var(--color-white);
+        margin: 0 10px;
+        font-weight: bold;
+        /* Underline on hover for better UX */
+        transition: color var(--transition-speed), border-bottom var(--transition-speed);
+        display: inline-block;
+        padding-bottom: 0.25rem;
+        border-bottom: 2px solid transparent;
+    }
+
+    .footer-links a:hover {
+        color: var(--color-accent);
+        border-bottom: 2px solid var(--color-accent);
+    }
+
+    .footer-social a {
+        margin: 0 10px;
+    }
+
+    .footer-social ion-icon {
+        font-size: 30px;
+        color: var(--color-white);
+        /* Add a transition for a smooth hover effect */
+        transition: color var(--transition-speed);
+    }
+
+    .footer-social a:hover ion-icon {
+        color: var(--color-accent);
+    }
+
+    .footer-contact p {
+        /* Improve readability */
+        line-height: 1.6;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-speed), transform var(--transition-speed), background-color var(--transition-speed);
+        z-index: 999;
+        /* Box shadow for a floating effect */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+        transform: scale(1.1);
+        background-color: var(--color-accent);
+    }
+
+    /* Animations */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    </style>
+
+    </head>
+<body>
+<header>
+    <div class="logo">
+        <h1>Studyhub</h1>
+    </div>
+    <div class="header-actions">
+        <button class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+            <ion-icon name="moon-outline"></ion-icon>
+        </button>
+        <button class="nav-toggle" aria-label="Toggle Navigation">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#newsletter">Subscribe</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="hero">
+    <div class="hero-content">
+        <h1>Connect, Learn,<br />and Grow Together</h1>
+        <p>
+            Join a vibrant community of students, access exclusive resources,
+            discover internships, and succeed in your academic journey.
+        </p>
+        <a href="/login.html"><button class="cta-btn">Get Started</button></a>
+    </div>
+</section>
+
+<section id="features" class="fade-in">
+    <h2>Our Key Features</h2>
+    <div class="features-container">
+        <div class="feature-card">
+            <i class="fa-solid fa-user-group"></i>
+            <div class="feature-card-content">
+                <h3>Make New Friends</h3>
+                <p>
+                    Connect with students from different institutions and build your
+                    network.
+                </p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-file-alt"></i> 
+            <div class="feature-card-content">
+                <h3>Attractive Notes</h3>
+                <p>
+                    Access course-specific notes enriched by a community of passionate
+                    learners.
+                </p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-file-signature"></i> 
+            <div class="feature-card-content">
+                <h3>Previous Papers</h3>
+                <p>
+                    Learn from past exams, understand patterns, and ace your tests with
+                    confidence.
+                </p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-calendar-day"></i> 
+            <div class="feature-card-content">
+                <h3>Events & Challenges</h3>
+                <p>
+                    Participate in events, competitions, and hackathons to test your
+                    knowledge.
+                </p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-chart-bar"></i> 
+            <div class="feature-card-content">
+                <h3>Track Progress</h3>
+                <p>
+                    Monitor your performance, set goals, and stay motivated throughout
+                    your studies.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps-container">
+        <div class="step">
+            <ion-icon name="create-outline"></ion-icon>
+            <h3>Sign Up</h3>
+            <p>
+                Register with your college email, verify your identity, and join a
+                community.
+            </p>
+        </div>
+        <div class="step">
+            <ion-icon name="people-outline"></ion-icon>
+            <h3>Join Groups</h3>
+            <p>
+                Get automatically placed in course-specific groups to interact and
+                learn together.
+            </p>
+        </div>
+        <div class="step">
+            <ion-icon name="school-outline"></ion-icon>
+            <h3>Access Resources</h3>
+            <p>
+                Download notes, previous year papers, apply for internships, and grow
+                academically.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="resources" class="fade-in">
+    <h2>Explore Our Resources</h2>
+    <div class="resources-container">
+        <div class="resource-card">
+            <h3>Educational Articles</h3>
+            <p>
+                Browse insightful blog posts and expert-written guides to enhance your
+                learning.
+            </p>
+        </div>
+        <div class="resource-card">
+            <h3>FAQs</h3>
+            <p>
+                Get quick answers to common questions and make the most of our
+                platform.
+            </p>
+        </div>
+        <div class="resource-card">
+            <h3>Help Center</h3>
+            <p>
+                Need assistance? Access documentation or reach out to our support
+                team.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="testimonials">
+    <h2>What Our Students Say</h2>
+    <div class="testimonials-container">
+        <div class="testimonial active">
+            <p>
+                "Studyhub connected me with peers from other colleges, helping me
+                expand my network and improve my study habits."
+            </p>
+            <div class="author">-  Chandan Maurya, B.Tech Student</div>
+        </div>
+        <div class="testimonial">
+            <p>
+                "The notes and previous papers helped me excel in my exams. The
+                platform is user-friendly and resourceful."
+            </p>
+            <div class="author">- Priya Singh, BA Student</div>
+        </div>
+        <div class="testimonial">
+            <p>
+                "I found my first internship opportunity through Studyhub. It's a
+                one-stop solution for all my academic needs."
+            </p>
+            <div class="author">- Rahul Verma, B.Sc Student</div>
+        </div>
+    </div>
+    <div class="testimonial-nav">
+        <button class="prev" aria-label="Previous Testimonial">&larr;</button>
+        <button class="next" aria-label="Next Testimonial">&rarr;</button>
+    </div>
+</section>
+
+<section id="newsletter" class="fade-in">
+    <h2>Stay Updated</h2>
+    <p>
+        Subscribe to our newsletter and never miss out on new features, events,
+        and opportunities.
+    </p>
+    <form class="newsletter-form">
+        <input type="email" id="email" placeholder="Your Email" required />
+        <button type="button" id="subscribeButton">Subscribe</button>
+      </form>
+      
+      <div id="message"></div>
+</section>
+
+<footer id="contact">
+    <div class="footer-links">
+        <a href="#">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#resources">Resources</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#newsletter">Subscribe</a>
+        <a href="#contact">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer-social">
+        <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+        <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+        <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
+    </div>
+    <div class="footer-contact">
+        <p>Email: Studyhub@gmail.com</p>
+        <p>Phone: +91 9136521351</p>
+    </div>
+    <p style="margin-top: 1rem; font-size: 0.9rem; color: #ccc">
+        &copy; 2024 Studyhub - All Rights Reserved
+    </p>
+</footer>
+
+<button class="back-to-top" aria-label="Back to Top">
+    <ion-icon name="arrow-up-outline"></ion-icon>
+</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const navToggle = document.querySelector(".nav-toggle");
+        const navMenu = document.querySelector("header nav ul");
+        const header = document.querySelector("header");
+        const backToTopBtn = document.querySelector(".back-to-top");
+        const darkModeToggle = document.querySelector(".dark-mode-toggle");
+        const body = document.body;
+
+        // Mobile Nav Toggle
+        if (navToggle) {
+            navToggle.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+            });
+        }
+
+        // Change Header on Scroll & Back to Top
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 50) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        });
+
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Dark Mode Toggle
+        darkModeToggle.addEventListener("click", () => {
+            if (body.getAttribute("data-theme") === "light") {
+                body.setAttribute("data-theme", "dark");
+                darkModeToggle.innerHTML = '<ion-icon name="sunny-outline"></ion-icon>';
+            } else {
+                body.setAttribute("data-theme", "light");
+                darkModeToggle.innerHTML = '<ion-icon name="moon-outline"></ion-icon>';
+            }
+        });
+
+        // Intersection Observer for Fade-in elements
+        const fadeInElements = document.querySelectorAll(".fade-in");
+        const steps = document.querySelectorAll(".step");
+
+        const observerOptions = {
+            threshold: 0.1,
+        };
+
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach((el) => fadeInObserver.observe(el));
+
+        // Steps fade-in with same observer
+        const stepsObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        steps.forEach((step) => stepsObserver.observe(step));
+
+        // Testimonials Carousel
+        const testimonials = document.querySelectorAll(".testimonial");
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            testimonials.forEach((t, i) => {
+                t.classList.remove("active");
+                t.style.transform = `translateX(${(i - index) * 100}%)`;
+                t.style.opacity = i === index ? 1 : 0;
+            });
+            testimonials[index].classList.add("active");
+        }
+
+        showTestimonial(currentTestimonial);
+
+        prevBtn.addEventListener("click", () => {
+            currentTestimonial =
+                (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+
+        nextBtn.addEventListener("click", () => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+    });
+
+    //for subscribe message sending 
+    const subscribeButton = document.getElementById('subscribeButton');
+    const emailInput = document.getElementById('email');
+    const messageDiv = document.getElementById('message');
+
+    subscribeButton.addEventListener('click', () => {
+    const email = emailInput.value;
+
+    // Basic email validation (you can add more robust validation if needed)
+    if (!validateEmail(email)) {
+        messageDiv.textContent = 'Please enter a valid email address.';
+        messageDiv.style.color = 'red';
+        return;
+    }
+
+    fetch('http://localhost:8080/api/email/subscribe', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+        messageDiv.textContent = data.message;
+        messageDiv.style.color = 'green';
+        emailInput.value = ''; // Clear the input field
+        } else {
+        messageDiv.textContent = 'An error occurred.';
+        messageDiv.style.color = 'red';
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        messageDiv.textContent = 'An error occurred.';
+        messageDiv.style.color = 'red';
+    });
+    });
+
+    function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+    }
+</script>
+</body>
+</html>
